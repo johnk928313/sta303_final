@@ -74,6 +74,116 @@ _For each research question, you will want to briefly describe any data manipula
 
 # read in the data
 black_saber_current_employees <- read_csv("data/black-saber-current-employees.csv")
+----DANDAN
+phase1 <- read_csv("data/phase1-new-grad-applicants-2020.csv")
+phase2 <- read_csv("data/phase2-new-grad-applicants-2020.csv")
+phase3 <- read_csv("data/phase3-new-grad-applicants-2020.csv")
+final <- read_csv("data/final-hires-newgrad_2020.csv")
+
+# aggregate information for the final hired applicants
+phase3 <-inner_join(phase2,phase3,by="applicant_id")
+final<- inner_join(phase3,final,by="applicant_id")
+
+# aggregate information for all candidates
+origin_phase <-left_join(phase1,phase2)
+all_phases<-left_join(origin_phase,phase3)
+
+# create a new variable "final_result" to show whether candidates moved to next phase during hiring process
+all_phases$final_result <- ifelse(all_phases$applicant_id %in% final$applicant_id, "Hired",          
+                           ifelse(all_phases$applicant_id %in% phase3$applicant_id,"Refused at phase 3",  
+                           ifelse(all_phases$applicant_id %in% phase2$applicant_id,"Refused at phase 2","Refused at phase 1")))
+all_phases<-as.data.frame(unclass(all_phases))
+all_phases$applicant_id <- as.character(all_phases$applicant_id)
+all_phases$final_result <- factor(all_phases$final_result,level=c("Refused at phase 1","Refused at phase 2","Refused at phase 3","Hired"))
+
+# exploratory data analysis
+all_phases<-all_phases %>%
+  mutate_if(is.numeric,replace_na,replace=0)
+# gender distribution on final hiring results
+all_phases %>%
+  ggplot(aes(x=final_result,fill=gender)) +
+  geom_bar(position="fill")+
+  theme_minimal()+
+  labs(title="Gender distribution on final hiring results",
+       x="Final result",
+       y="Percentage")
+
+# average interview rating grouped by gender during phase 3 
+phase3 %>%
+  ggplot(aes(x=interviewer_rating_1,color=gender)) +
+  geom_boxplot()+
+  theme_minimal()+
+  theme(axis.text.y=element_blank())+
+  labs(title="Interview rating 1 grouped by gender",
+       x="Interview rating 1 ")
+
+phase3 %>%
+  ggplot(aes(x=interviewer_rating_2,color=gender)) +
+  geom_boxplot()+
+  theme_minimal()+
+  theme(axis.text.y=element_blank())+
+  labs(title="Interview rating 2 grouped by gender",
+       x="Interview rating 2 ")
+
+# check AI autogrades bias based on pre-recorded videos
+phase2 %>%
+  ggplot(aes(x=leadership_presence,fill=gender)) +
+  geom_bar(position="fill")+
+  theme_minimal()+
+  labs(title="Gender distribution for leadership presence",
+       x="Leadership presence",
+       y="Percentage")
+phase2 %>%
+  ggplot(aes(x=speaking_skills,fill=gender)) +
+  geom_bar(position="fill")+
+  theme_minimal()+
+  labs(title="Gender distribution for speaking skills",
+       x="Speaking skills",
+       y="Percentage")
+# check AI autogrades bias based on timed tasks
+phase2 %>%
+  ggplot(mapping= aes(x=technical_skills,color=gender))+
+  theme_minimal()+
+  geom_freqpoly(binwidth=10)+
+  labs(title="Scores for technical skills grouped by gender",
+       x="Technical skills",
+       y="Count")
+phase2 %>%
+  ggplot(mapping= aes(x=writing_skills,color=gender))+
+  theme_minimal()+
+  geom_freqpoly(binwidth=10)+
+  labs(title="Scores for writing skills grouped by gender",
+       x="Writing skills",
+       y="Count")
+
+# create new variables to show the hiring results for each candidates in each phrase
+phase1$result <- ifelse(phase1$applicant_id %in% phase2$applicant_id,"proceed","refused")
+phase2$result <- ifelse(phase2$applicant_id %in% phase3$applicant_id,"proceed","refused")
+phase3$result <- ifelse(phase3$applicant_id %in% final$applicant_id,"proceed","refused")
+all_phases$result <- ifelse(all_phases$applicant_id %in% final$applicant_id,"Hired","no")
+# fit models for each phase and compare them
+phase1<-as.data.frame(unclass(phase1))
+model_1 <-glm(as.factor(result)~gpa+gender+extracurriculars+work_experience,
+              data=phase1,family=binomial("logit"))
+summary(model_1)
+
+phase2<-as.data.frame(unclass(phase2))
+model_2 <-glm(as.factor(result)~gpa+gender+extracurriculars+work_experience,
+              data=phase2,family=binomial("logit"))
+summary(model_2)
+
+phase3<-as.data.frame(unclass(phase3))
+model_3 <-glm(as.factor(result)~gpa+gender+extracurriculars+work_experience,
+              data=phase3,family=binomial("logit"))
+summary(model_3)
+
+model_4<-glm(as.factor(result)~gpa+gender+extracurriculars+work_experience,
+             data=all_phases,family=binomial("logit"))
+summary(model_4)
+
+------DANDAN
+
+
 
 # create a visualisation
 my_plot <- black_saber_current_employees %>% 
