@@ -18,8 +18,15 @@ titlepage-rule-height: 2
 
 ```{r, message = FALSE, echo=FALSE}
 library(tidyverse)
+library(sta303project)
 # this should supress all code and messages
 knitr::opts_chunk$set(include=FALSE)
+
+phase1 <- phase1_new_grad_applicants_2020
+phase2 <- phase2_new_grad_applicants_2020
+phase3 <- phase3_new_grad_applicants_2020
+final_hire <- final_hires_newgrad_2020
+current_employees <- black_saber_current_employees
 ```
 
 # General comments (you can delete this section)
