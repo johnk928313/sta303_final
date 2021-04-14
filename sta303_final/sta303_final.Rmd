@@ -168,18 +168,24 @@ model_1 <-glm(as.factor(result)~gpa+gender+extracurriculars+work_experience,
 summary(model_1)
 
 phase2<-as.data.frame(unclass(phase2))
-model_2 <-glm(as.factor(result)~gpa+gender+extracurriculars+work_experience,
+model_2 <-glm(as.factor(result)~gpa+gender+extracurriculars+work_experience
+              +leadership_presence+speaking_skills+technical_skills+writing_skills,
               data=phase2,family=binomial("logit"))
 summary(model_2)
 
 phase3<-as.data.frame(unclass(phase3))
-model_3 <-glm(as.factor(result)~gpa+gender+extracurriculars+work_experience,
+model_3 <-glm(as.factor(result)~gpa+gender+extracurriculars+work_experience
+              +leadership_presence+speaking_skills+technical_skills+writing_skills
+              +interviewer_rating_1+interviewer_rating_2,
               data=phase3,family=binomial("logit"))
 summary(model_3)
 
-model_4<-glm(as.factor(result)~gpa+gender+extracurriculars+work_experience,
+model_4<-glm(as.factor(result)~gpa+gender+extracurriculars+work_experience
+              +leadership_presence+speaking_skills+technical_skills+writing_skills
+              +interviewer_rating_1+interviewer_rating_2,
              data=all_phases,family=binomial("logit"))
 summary(model_4)
+
 
 ------DANDAN
 
