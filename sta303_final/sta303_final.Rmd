@@ -17,6 +17,9 @@ titlepage-rule-height: 2
 ---
 
 ```{r, message = FALSE, echo=FALSE}
+# install.packages("gtsummary")
+library(gtsummary)
+library(dplyr)
 library(tidyverse)
 library(sta303project)
 # this should supress all code and messages
@@ -72,20 +75,16 @@ _For each research question, you will want to briefly describe any data manipula
 ```{r}
 # This chunk provides an example of some things you can do with RMarkdown to make your report creation process easier
 
-# read in the data
+# read the data
 black_saber_current_employees <- read_csv("data/black-saber-current-employees.csv")
-#DANDAN
 phase1 <- read_csv("data/phase1-new-grad-applicants-2020.csv")
 phase2 <- read_csv("data/phase2-new-grad-applicants-2020.csv")
 phase3 <- read_csv("data/phase3-new-grad-applicants-2020.csv")
 final <- read_csv("data/final-hires-newgrad_2020.csv")
-```
 
-```{r hiring_phase}
 # aggregate information for the final hired applicants
 phase3 <-inner_join(phase2,phase3,by="applicant_id")
 final<- inner_join(phase3,final,by="applicant_id")
-
 # aggregate information for all candidates
 origin_phase <-left_join(phase1,phase2)
 all_phases<-left_join(origin_phase,phase3)
@@ -94,13 +93,34 @@ all_phases<-left_join(origin_phase,phase3)
 all_phases$final_result <- ifelse(all_phases$applicant_id %in% final$applicant_id, "Hired",          
                            ifelse(all_phases$applicant_id %in% phase3$applicant_id,"Refused at phase 3",  
                            ifelse(all_phases$applicant_id %in% phase2$applicant_id,"Refused at phase 2","Refused at phase 1")))
-all_phases<-as.data.frame(unclass(all_phases))
-all_phases$applicant_id <- as.character(all_phases$applicant_id)
 all_phases$final_result <- factor(all_phases$final_result,level=c("Refused at phase 1","Refused at phase 2","Refused at phase 3","Hired"))
+# create new variables to show the hiring results for each candidates in each phrase
+phase1$result <- ifelse(phase1$applicant_id %in% phase2$applicant_id,"proceed","refused")
+phase2$result <- ifelse(phase2$applicant_id %in% phase3$applicant_id,"proceed","refused")
+phase3$result <- ifelse(phase3$applicant_id %in% final$applicant_id,"proceed","refused")
+all_phases$result <- ifelse(all_phases$applicant_id %in% final$applicant_id,"Hired","no")
 
 # exploratory data analysis
-all_phases<-all_phases %>%
-  mutate_if(is.numeric,replace_na,replace=0)
+# create a table summary for the final hired
+phase1 %>% tbl_summary(by = gender) %>% add_p()
+phase2 %>% 
+  tbl_summary(by = gender,
+    statistic = list(all_continuous() ~ "{mean} ({sd})",
+                     all_categorical() ~ "{n} / {N} ({p}%)"),
+    digits = all_continuous() ~ 2)
+all_phases %>% 
+  tbl_summary(by = gender,
+    statistic = list(all_continuous() ~ "{mean} ({sd})",
+                     all_categorical() ~ "{n} / {N} ({p}%)"),
+    digits = all_continuous() ~ 2,
+    missing_text = "(Missing)")
+# save table as image
+gt::gtsave("images/example.png")
+
+# tidy up the data
+all_phases<-as.data.frame(unclass(all_phases))
+all_phases$applicant_id <- as.character(all_phases$applicant_id)
+
 # gender distribution on final hiring results
 all_phases %>%
   ggplot(aes(x=final_result,fill=gender)) +
@@ -157,8 +177,37 @@ phase2 %>%
   labs(title="Scores for writing skills grouped by gender",
        x="Writing skills",
        y="Count")
-```
 
+
+# fit models for each phase and compare them
+phase1<-as.data.frame(unclass(phase1))
+model_1 <-glm(as.factor(result)~gpa+gender+extracurriculars+work_experience,
+              data=phase1,family=binomial("logit"))
+summary(model_1)
+tbl_regression(model_1, exponentiate = TRUE)
+
+phase2<-as.data.frame(unclass(phase2))
+model_2 <-glm(as.factor(result)~gpa+gender+extracurriculars+work_experience
+              +leadership_presence+speaking_skills+technical_skills+writing_skills,
+              data=phase2,family=binomial("logit"))
+summary(model_2)
+tbl_regression(model_2, exponentiate = TRUE)
+
+
+phase3<-as.data.frame(unclass(phase3))
+model_3 <-glm(as.factor(result)~gpa+gender+extracurriculars+work_experience
+              +leadership_presence+speaking_skills+technical_skills+writing_skills
+              +interviewer_rating_1+interviewer_rating_2,
+              data=phase3,family=binomial("logit"))
+summary(model_3)
+tbl_regression(model_3, exponentiate = TRUE)
+
+model_4<-glm(as.factor(result)~gpa+gender+extracurriculars+work_experience
+              +leadership_presence+speaking_skills+technical_skills+writing_skills
+              +interviewer_rating_1+interviewer_rating_2,
+             data=all_phases,family=binomial("logit"))
+summary(model_4)
+tbl_regression(model_4, exponentiate = TRUE)
 ```{r}
 # create new variables to show the hiring results for each candidates in each phrase
 phase1$result <- ifelse(phase1$applicant_id %in% phase2$applicant_id,"proceed","refused")
@@ -192,12 +241,27 @@ summary(model_4)
 ```
 
 ```{r current_emp}
+# clean the salary data for further analysis
+black_saber_current_employees$salary<-gsub("\\$","",black_saber_current_employees$salary)
+black_saber_current_employees$salary<-gsub("\\,","",black_saber_current_employees$salary)
+black_saber_current_employees$salary<-as.numeric(black_saber_current_employees$salary)
 
-```
+# create a table to show the summary
+black_saber_current_employees %>% 
+  select(gender, role_seniority, productivity,salary) %>%
+  tbl_summary(by = gender,
+    statistic = list(all_continuous() ~ "{mean} ({sd})",
+                     all_categorical() ~ "{n} / {N} ({p}%)"),
+    digits = all_continuous() ~ 2)%>% bold_labels()
+
+# tidy up the dataset
+black_saber_current_employees$employee_id<-as.character(black_saber_current_employees$employee_id)
+black_saber_current_employees$gender<-as.factor(black_saber_current_employees$gender)
+black_saber_current_employees$team<-as.factor(black_saber_current_employees$team)
+black_saber_current_employees$role_seniority<-as.factor(black_saber_current_employees$role_seniority)
+black_saber_current_employees$leadership_for_level<-as.factor(black_saber_current_employees$leadership_for_level)
 
 
-
-```{r}
 
 # create a visualisation
 my_plot <- black_saber_current_employees %>% 
