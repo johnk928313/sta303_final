@@ -140,6 +140,17 @@ phase2 %>%
 #    y = "Density"
 #  )
 
+# check for gender bias in each team for promotion process
+black_saber_current_employees %>% 
+ ggplot(aes(y= leadership_for_level,fill=gender))+
+  geom_bar(position="fill")+
+  theme_minimal()+
+  facet_wrap(~team)
+  labs(title="Gender distribution on leadership for level in each team ",
+       y="Leadership for level",
+       x="Percentage",
+       caption = str_c("Prepared by SFP\n",Sys.Date()))
+
 #model_2 <- lm(as.numeric(salary) ~ productivity + as.factor(gender) + as.factor(role_seniority), data = black_saber_current_employees)
 
 #summary(model_2)
