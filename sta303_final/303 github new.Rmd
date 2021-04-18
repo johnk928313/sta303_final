@@ -192,8 +192,7 @@ summary(model_2)
 tbl_regression(model_2, exponentiate = TRUE)
 phase3<-as.data.frame(unclass(phase3))
 model_3 <-glm(as.factor(result)~gpa+as.factor(gender)+extracurriculars+work_experience
-              +leadership_presence+speaking_skills+technical_skills+writing_skills
-              +interviewer_rating_1+interviewer_rating_2,
+              +leadership_presence+speaking_skills+technical_skills+writing_skills + interviewer_rating_2,
               data=phase3,family=binomial("logit"))
 summary(model_3)
 tbl_regression(model_3, exponentiate = TRUE)
@@ -310,6 +309,11 @@ _In this section you will summarize your findings across all the research questi
 **Lucas Xian**. Lucas is a senior consultant with SFP. He specializes in data analysis and visualization. Lucas earned his Honours Bachelor of Science, Specialist in Statistics, from the University of Toronto in 2023.
 
 **Dandan Zhang**. Dandan is a junior consultant with SFP. She earned her Bachelor of Science, majoring in Mathematics and Statistics, from the University of Toronto in 2021.She specializes in data visualization. 
+
+**Jong-Hoon Kim** John is a senior consultant with SFP. He earned his Bachelor of Science in statistics and economics, from the University of Toronto in 2021. He specialises in data analysis and visualisation. 
+
+**Zikun Lei** Zikun Lei is a senior consultant with SFP. He earned his Bachelor of Science in statistics and economics, from the University of Toronto in 2021. He specialises in data analysis and visualisation. 
+
 
 ## Code of ethical conduct
 
