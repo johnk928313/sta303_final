@@ -214,6 +214,7 @@ model_4<-glm(as.factor(result)~gpa+gender+extracurriculars+work_experience
              data=all_phases,family=binomial("logit"))
 summary(model_4)
 tbl_regression(model_4, exponentiate = TRUE)
+```
 
 
 ```{r current_emp,include=FALSE}
