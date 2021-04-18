@@ -27,7 +27,7 @@ library(dplyr)
 library(tidyverse)
 library(sta303project)
 # this should supress all code and messages
-knitr::opts_chunk$set(include=FALSE)
+knitr::opts_chunk$set(include=TRUE)
 phase1 <- phase1_new_grad_applicants_2020
 phase2 <- phase2_new_grad_applicants_2020
 phase3 <- phase3_new_grad_applicants_2020
@@ -76,7 +76,7 @@ _Use bullet points to to describe the research questions you are going to addres
 
 _For each research question, you will want to briefly describe any data manipulation, show some exploratory plots/summary tables, report on any methods you use (i.e. models you fit) and the conclusions you draw from these_
 
-```{r}
+```{r, echo=FALSE}
 # This chunk provides an example of some things you can do with RMarkdown to make your report creation process easier
 # read the data
 library(parameters)
@@ -129,7 +129,7 @@ all_phases %>%
        caption = str_c("Prepared by SFP\n",Sys.Date()))
 # average interview rating grouped by gender during phase 3 
 phase3 %>%
-  ggplot(aes(x=interviewer_rating_1,oolor=gender)) +
+  ggplot(aes(x=interviewer_rating_1,color=gender)) +
   geom_boxplot()+
   theme_minimal()+
   theme(axis.text.y=element_blank())+
@@ -180,24 +180,24 @@ phase2 %>%
        caption = str_c("Prepared by SFP\n",Sys.Date()))
 # fit models for each phase and compare them
 phase1<-as.data.frame(unclass(phase1))
-model_1 <-glm(as.factor(result)~gpa+gender+extracurriculars+work_experience,
+model_1 <-glm(as.factor(result)~gpa+as.factor(gender)+extracurriculars+work_experience,
               data=phase1,family=binomial("logit"))
 summary(model_1)
 tbl_regression(model_1, exponentiate = TRUE)
 phase2<-as.data.frame(unclass(phase2))
-model_2 <-glm(as.factor(result)~gpa+gender+extracurriculars+work_experience
+model_2 <-glm(as.factor(result)~gpa+as.factor(gender)+extracurriculars+work_experience
               +leadership_presence+speaking_skills+technical_skills+writing_skills,
               data=phase2,family=binomial("logit"))
 summary(model_2)
 tbl_regression(model_2, exponentiate = TRUE)
 phase3<-as.data.frame(unclass(phase3))
-model_3 <-glm(as.factor(result)~gpa+gender+extracurriculars+work_experience
+model_3 <-glm(as.factor(result)~gpa+as.factor(gender)+extracurriculars+work_experience
               +leadership_presence+speaking_skills+technical_skills+writing_skills
               +interviewer_rating_1+interviewer_rating_2,
               data=phase3,family=binomial("logit"))
 summary(model_3)
 tbl_regression(model_3, exponentiate = TRUE)
-model_4<-glm(as.factor(result)~gpa+gender+extracurriculars+work_experience
+model_4<-glm(as.factor(result)~gpa+as.factor(gender)+extracurriculars+work_experience
               +leadership_presence+speaking_skills+technical_skills+writing_skills
               +interviewer_rating_1+interviewer_rating_2,
              data=all_phases,family=binomial("logit"))
@@ -206,7 +206,7 @@ tbl_regression(model_4, exponentiate = TRUE)
 ```
 
 
-```{r current_emp,include=FALSE}
+```{r current_emp,include, echo=FALSE, message=FALSE}
 # clean the salary data for further analysis
 black_saber_current_employees$salary<-gsub("\\$","",black_saber_current_employees$salary)
 black_saber_current_employees$salary<-gsub("\\,","",black_saber_current_employees$salary)
