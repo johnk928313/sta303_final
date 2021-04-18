@@ -76,7 +76,7 @@ _Use bullet points to to describe the research questions you are going to addres
 
 _For each research question, you will want to briefly describe any data manipulation, show some exploratory plots/summary tables, report on any methods you use (i.e. models you fit) and the conclusions you draw from these_
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, warning=FALSE}
 # This chunk provides an example of some things you can do with RMarkdown to make your report creation process easier
 # read the data
 library(parameters)
