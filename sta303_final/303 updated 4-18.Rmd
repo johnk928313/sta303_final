@@ -1,6 +1,6 @@
 ---
-title: "Report title"
-subtitle:""
+title: "Gender parity in hiring and remuneration processes"
+subtitle:"Analysis of fairness based on employees' talent and value"
 author: "Report prepared for Black Saber Software by SFP"
 date: '2021-04-21'
 output:
