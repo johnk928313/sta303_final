@@ -63,7 +63,9 @@ _This part of the report is much more comprehensive than the executive summary. 
 _Provide a brief introduction to your report and outline what the report will cover. This section is valuable for setting scope and expectations. _
 
 ### Research questions
-_Use bullet points to to describe the research questions you are going to address. Write in full sentences._
+* If the promotion, and salary process are all fair to all employees and based on their ability and value to BSS?
+* Does the new AI service in the hiring pipeline work and is reliable for future use?
+* In particular, is gender a potential bias during the promotion and salary processes?
 
 ## Informative title for section addressing a research question
 
@@ -197,10 +199,6 @@ _In this section you will summarize your findings across all the research questi
 
 **Zikun Lei** Zikun Lei is a senior consultant with SFP. He earned his Bachelor of Science in statistics and economics, from the University of Toronto in 2021. He specialises in data analysis and visualisation. 
 
-
-**Statsy McStatsstats**. Statsy is a senior consultant with Eminence Analytics. She specializes in data visualization. Statsy earned her Bachelor of Science, Specialist in Statistics Methods and Practice, from the University of Toronto in 2023.
-
-**Datana Scatterplot**. Datana is a junior consultant with Eminence Analytics. They specialize in reproducible analysis and statistical communication. Datana earned their Bachelor of Science, Majoring in Computer Science and Statistics from the University of Toronto in 2024.
 
 ## Code of ethical conduct
 
