@@ -72,7 +72,7 @@ _Provide a brief introduction to your report and outline what the report will co
 
 _For each research question, you will want to briefly describe any data manipulation, show some exploratory plots/summary tables, report on any methods you use (i.e. models you fit) and the conclusions you draw from these_
 
-```{r, warning=FALSE}
+```{r, warning=FALSE, message=F}
 # This chunk provides an example of some things you can do with RMarkdown to make your report creation process easier
 
 # read in the data
@@ -100,7 +100,9 @@ phase3$result <- ifelse(phase3$applicant_id %in% final$applicant_id,"proceed","r
 all_phase$result <- ifelse(all_phase$applicant_id %in% final$applicant_id,"Hired","no")
 
 # Create model 1 to see if several response variables are related to the final result.
+```
 
+```{r, warning=F}
 model_1 <- glm(as.factor(result) ~ gpa+cv+cover_letter+extracurriculars+work_experience,
                data = all_phase, family = binomial("logit"))
 
@@ -132,7 +134,9 @@ black_saber_current_employees$gender<-as.factor(black_saber_current_employees$ge
 black_saber_current_employees$team<-as.factor(black_saber_current_employees$team)
 black_saber_current_employees$role_seniority<-as.factor(black_saber_current_employees$role_seniority)
 black_saber_current_employees$leadership_for_level<-as.factor(black_saber_current_employees$leadership_for_level)
+```
 
+```{r}
 # check general relationship between productivity and salary for each team
 black_saber_current_employees %>% 
  ggplot(aes(x= productivity,y=salary,color=gender))+
@@ -146,15 +150,18 @@ black_saber_current_employees %>%
        y="Salary",
        caption = str_c("Prepared by SFP\n",Sys.Date()))
 ggsave("images/productivity_salary.png",width = 7, height = 4)
+```
 
+```{r}
 #models to check if salary is related to other variables
 mod_1 <-lmer(salary~gender+team+(1|employee_id),
              data=black_saber_current_employees)
 summary(mod_1)
 mod_2 <-lmer(salary~gender+team+role_seniority+productivity+leadership_for_level+(1|employee_id:team)+(1|employee_id),data=black_saber_current_employees)
 lmtest::lrtest(mod_1,mod_2)
+```
 
-
+```{r}
 #check general relationship between productivity and leadership_for_level for each team
 black_saber_current_employees %>% 
  ggplot(aes(x= leadership_for_level,fill=gender))+
