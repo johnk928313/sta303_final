@@ -1,6 +1,7 @@
 ---
 title: "Report title"
-author: "Report prepared for Black Saber Software by Eminence Analytics"
+subtitle:""
+author: "Report prepared for Black Saber Software by SFP"
 date: '2021-04-21'
 output:
   html_document:
@@ -154,16 +155,13 @@ lmtest::lrtest(mod_1,mod_2)
 
 
 #check general relationship between productivity and leadership_for_level for each team
-data <- black_saber_current_employees %>%
-  group_by(team) %>%
-  summarize(mean_prod = mean(productivity))
 black_saber_current_employees %>% 
  ggplot(aes(x= leadership_for_level,fill=gender))+
   geom_bar(position="fill")+
   theme_minimal()+
   facet_wrap(~team)+
-  labs(title="Gender distribution on role senionrity",
-       x="Role seniority",
+  labs(title="Gender distribution on leadership for level",
+       x="Leadership for level",
        y="Percentage",
        caption = str_c("Prepared by SFP\n",Sys.Date())) +
   scale_x_discrete(guide = guide_axis(n.dodge = 3))
