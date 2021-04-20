@@ -145,6 +145,7 @@ black_saber_current_employees %>%
        x="Productivity",
        y="Salary",
        caption = str_c("Prepared by SFP\n",Sys.Date()))
+ggsave("images/productivity_salary.png",width = 7, height = 4)
 
 #models to check if salary is related to other variables
 mod_1 <-lmer(salary~gender+team+(1|employee_id),
@@ -165,6 +166,7 @@ black_saber_current_employees %>%
        y="Percentage",
        caption = str_c("Prepared by SFP\n",Sys.Date())) +
   scale_x_discrete(guide = guide_axis(n.dodge = 3))
+  ggsave("images/productivity_leadership.png",width = 7, height = 4)
 ```
 
 
