@@ -27,6 +27,8 @@ library(lme4)
 library(gtsummary)
 library(gridExtra)
 library(grid)
+library(kableExtra)
+library("FrF2")
 # this should supress all code and messages
 knitr::opts_chunk$set(include = FALSE)
 ```
@@ -263,16 +265,25 @@ __Graph 1:__ General relationship between productivity and salary for each team 
 #models to check if salary is related to other variables
 mod_1 <-lmer(salary~gender+team+(1|employee_id),
              data=black_saber_current_employees)
-summary(mod_1)
+tbl_regression(mod_1)
 ```
 
 ```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
 mod_2 <-lmer(salary~gender+team+role_seniority+productivity+leadership_for_level+(1|employee_id:team)+(1|employee_id),data=black_saber_current_employees)
-summary(mod_2)
+tbl_regression(mod_2)
 ```
 
 ```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
 lmtest::lrtest(mod_1,mod_2)
+
+lrt_table_data <- data.frame(unclass(lmtest::lrtest(mod_1,mod_2)), check.names = FALSE, stringsAsFactors = FALSE)
+lrt_table_data['LogLik'] <- round(lrt_table_data['LogLik'], 0)
+lrt_table_data['Chisq'] <- round(lrt_table_data['Chisq'],0)
+lrt_table_data <- sapply(lrt_table_data, as.character)
+lrt_table_data[is.na(lrt_table_data)] <- " "
+
+kable( lrt_table_data, align = "lllll", booktabs = T) %>%
+  kable_styling(full_width = T)
 ```
 __Figure 3:__ Key statistical summaries of the Linear Mixed-Effect Model to check salary related variables. \
 
