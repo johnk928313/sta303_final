@@ -340,7 +340,7 @@ Finally, a limitation may be introduced as a result of implicit evaluation crite
 
 **Jong-Hoon Kim** John is a senior consultant with SFP. He earned his Bachelor of Science in statistics and economics, from the University of Toronto in 2021. He specialises in data analysis and visualisation. 
 
-**Zikun Lei** Zikun Lei is a senior consultant with SFP. He earned his Bachelor of Science in statistics and economics, from the University of Toronto in 2021. He specialises in data analysis and visualisation. 
+**Zikun Lei** Zikun is a senior consultant with SFP. He earned his Bachelor of Science in statistics and economics, from the University of Toronto in 2021. He specialises in data analysis and visualisation. 
 
 
 ## Code of ethical conduct
