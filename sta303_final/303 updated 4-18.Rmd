@@ -60,7 +60,10 @@ _This part of the report is much more comprehensive than the executive summary. 
 
 ## Introduction
 
-_Provide a brief introduction to your report and outline what the report will cover. This section is valuable for setting scope and expectations. _
+Recently, several complaints were received related to potential bias in the hiring and remuneration processes. Hence, BSS (Black Saber Software) required our team to take a look and give out a related report for the Board of Directors. The purpose of this study is to investigate if BSS’s hiring, promotion, and salary were processing fairly based on talent and value to the company. We were especially interested in exploring potential gender bias in the hiring and remuneration processes. Besides, we also investigated the performance of the new AI service in the hiring pipeline. Data was provided by the data team from BSS including hiring data for their new graduate program and data for their current employees. 
+
+In this report, we will specify different explanatory and response variables for. Then, we will fit several generalized linear models and a linear mixed effects model to analyze the results. At the end, we will point out the same limitations of our model. The whole report will be run on R.studio and knit into pdf.
+
 
 ### Research questions
 * Does the new AI service in the hiring pipeline work and is reliable for future use?
