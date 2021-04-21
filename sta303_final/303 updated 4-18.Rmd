@@ -22,8 +22,11 @@ titlepage-rule-height: 2
 
 ```{r, message = FALSE, echo=FALSE}
 library(tidyverse)
+library(dplyr)
 library(lme4)
 library(gtsummary)
+library(gridExtra)
+library(grid)
 # this should supress all code and messages
 knitr::opts_chunk$set(include = FALSE)
 ```
@@ -31,27 +34,27 @@ knitr::opts_chunk$set(include = FALSE)
 \newpage
 # Executive summary
 
-**Background & Aim** :
-
+## Background & Aim : \
 Concerns about potential bias in the hiring and remuneration processes were consistently raised internally in Black Saber Software. In order to investigate the true fact for the issues, we SFP were consent to help figure it out. This report was commissioned to examine if potential issues especially gender parity existed in the hiring, promotion and salary processes based on the hiring data and data about promotion and wages for current employees provided by Black Saber Software . Besides, we were interested in the fact how the new trialled AI service performanced in the hiring process. 
 
-**Key results** \
-final result vs. productivity \
-final hiring result vs. gender \
-AI result good? \
-promotion vs. productivity \
-promotion vs. gender \
-salary vs. productivity \
-salary vs. gender
+## Key results : \
+* final result vs. productivity \
+* final hiring result vs. gender \
+* AI result good? \
+* promotion vs. productivity \
+* promotion vs. gender \
+* salary vs. productivity \
+* salary vs. gender
 
-**Limitations** :
-
-We were only offered with data for current employees so it was hard to know reasons past employees left. If additional data related to past employees can be provided, we can have a more deep and comprehensive sight into potential biases;
-The lack of ethnicity/race data also results in a limitation since race might be a potential exist which might influence the results of hiring pipelines and promotion and amount of wages;
+## Limitations: \
+We were only offered with data for current employees so it was hard to know reasons past employees left. If additional data related to past employees can be provided, we can have a more deep and comprehensive sight into potential biases;\
+The lack of ethnicity/race data also results in a limitation since race might be a potential exist which might influence the results of hiring pipelines and promotion and amount of wages;\
 No information about the determination methods for hiring results, promotion and amount of salary was provided which limited the accuracy of models we fit for these processes.
-
 \newpage
+## Figures: \
 Key results are summarized in the following tables or graphs.
+![](images/bar_result_gender.png)
+![](images/AI_scores.png)
 
 \newpage
 # Technical report
@@ -115,11 +118,55 @@ phase2$result <- ifelse(phase2$applicant_id %in% phase3$applicant_id,"proceed","
 phase3$result <- ifelse(phase3$applicant_id %in% final$applicant_id,"proceed","refused")
 all_phase$result <- ifelse(all_phase$applicant_id %in% final$applicant_id,"Hired","no")
 
-# Create model 1 to see if several response variables are related to the final result.
+# check gender distribution on final results for applicants 
+bar_result_gender<-all_phase %>%
+  ggplot(aes(x=final_result,fill=gender)) +
+  geom_bar(position="fill")+
+  theme_minimal()+
+  labs(x="Final hiring result",
+       y="Percentage",
+       caption = str_c(" Figure1: Proportion of Applicants who were refused in each hiring pipeline or finally hired by gender"))
+ggsave(file="images/bar_result_gender.png", height = 3, width= 8) 
+
+# check AI service biased or not in Phase 2
+AI_technical<-phase2 %>%
+  ggplot(aes(x= gender,y=technical_skills,color=gender)) +
+  geom_boxplot()+
+  theme_minimal()+
+  theme(legend.position = "none",plot.title = element_text(hjust = 0.5, size = 11))+
+  labs(x= "Gender", y="Scores",title="Technical task scores")
+
+AI_writing<-phase2 %>%
+  ggplot(aes(x= gender,y=writing_skills,color=gender)) +
+  geom_boxplot()+
+  theme_minimal()+
+  theme(legend.position = "none",plot.title = element_text(hjust = 0.5, size = 11))+
+  labs(x= "Gender", y="Scores",
+       title="Writing task scores")
+
+AI_speaking<-phase2 %>%
+  ggplot(aes(x= gender,y=speaking_skills,color=gender)) +
+  geom_boxplot()+
+  theme_minimal()+
+  theme(legend.position = "none",plot.title = element_text(hjust = 0.5, size = 11))+
+  labs(x= "Gender",y="Rating",title="Speaking skills rating")
+
+AI_leadership<-phase2 %>%
+  ggplot(aes(x= gender,y=leadership_presence,color=gender)) +
+  geom_boxplot()+
+  theme_minimal()+
+  theme(legend.position = "none",plot.title = element_text(hjust = 0.5, size = 11))+
+  labs(x= "Gender",y="Rating",title="Leadership presence rating")
+
+AI_socres <-grid.arrange(AI_technical, AI_writing, AI_speaking, AI_leadership,
+                         nrow=2,ncol = 2, bottom = textGrob("Figure 3: Distribution of AI-autograded Scores/Ratings by Gender in the Phase 2, \n\nThe horizontal line in each box represents the median of scores which separates the top 50% scores from the\n lowest 50%. The horizontal lines at the top and bottom for each box represent the lowest 75% and 25% of the\n scores respectively. The ends of vertical lines give the full range of scores, with some dots representing \nextreme values away from the box.", x = 0.05, y = 0.6, just = "left", gp = gpar(fontsize = 9)))
+ggsave(file="images/AI_scores.png", AI_socres ,height = 3.5)
+
 ```
 
 
 ```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
+# Create model 1 to see if several response variables are related to the final result.
 model_1 <- glm(as.factor(result) ~ gpa+cv+cover_letter+extracurriculars+work_experience,
                data = all_phase, family = binomial("logit"))
 
