@@ -20,7 +20,7 @@ titlepage-rule-color: FFFFFF
 titlepage-rule-height: 2
 ---
 
-```{r, message = FALSE, echo=FALSE}
+```{r, message = FALSE, echo=FALSE, warning=FALSE}
 library(tidyverse)
 library(dplyr)
 library(lme4)
