@@ -25,7 +25,7 @@ library(tidyverse)
 library(lme4)
 library(gtsummary)
 # this should supress all code and messages
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(include = FALSE)
 ```
 
 \newpage
@@ -89,7 +89,7 @@ leadership_presence = A rating of leadership presence based on pre-recorded vide
 final_result = Indicate at which phase applicant was rejected or hired finally \
 result = Show the hiring result for each applicant in each hiring pipeline \
 
-```{r, warning=FALSE, message=F}
+```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
 
 # read in the data
 black_saber_current_employees <- read_csv("data/black-saber-current-employees.csv")
@@ -119,7 +119,7 @@ all_phase$result <- ifelse(all_phase$applicant_id %in% final$applicant_id,"Hired
 ```
 
 
-```{r, warning=F}
+```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
 model_1 <- glm(as.factor(result) ~ gpa+cv+cover_letter+extracurriculars+work_experience,
                data = all_phase, family = binomial("logit"))
 
@@ -132,7 +132,7 @@ __Figure 1:__ Overall Key statistical summaries of the Generalized Linear Model 
 \newpage
 
 **Is the AI used during the hiring process reliable?**
-```{r}
+```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
 model_2 <- glm(as.factor(result) ~ gpa+extracurriculars+work_experience+leadership_presence+
                  speaking_skills+technical_skills+writing_skills, 
                data = phase2, family = binomial("logit"))
@@ -155,7 +155,7 @@ leadership_for_level =  if the employee is appropriate for level, need improveme
 productivity = work output with respect to job description rated on a 0 - 100 scale \
 salary = salary at the given financial quarter \
 
-```{r}
+```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
 ## gender, promotion, and salary
 
 # clean the salary data for further analysis
@@ -171,7 +171,7 @@ black_saber_current_employees$role_seniority<-as.factor(black_saber_current_empl
 black_saber_current_employees$leadership_for_level<-as.factor(black_saber_current_employees$leadership_for_level)
 ```
 
-```{r}
+```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
 # check general relationship between productivity and salary for each team
 black_saber_current_employees %>% 
  ggplot(aes(x= productivity,y=salary,color=gender))+
@@ -188,24 +188,24 @@ ggsave("images/productivity_salary.png",width = 7, height = 4)
 ```
 __Graph 1:__ General relationship between productivity and salary for each team separated by gender. \
 
-```{r}
+```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
 #models to check if salary is related to other variables
 mod_1 <-lmer(salary~gender+team+(1|employee_id),
              data=black_saber_current_employees)
 summary(mod_1)
 ```
 
-```{r, warning=F, message=FALSE}
+```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
 mod_2 <-lmer(salary~gender+team+role_seniority+productivity+leadership_for_level+(1|employee_id:team)+(1|employee_id),data=black_saber_current_employees)
 summary(mod_2)
 ```
 
-```{r}
+```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
 lmtest::lrtest(mod_1,mod_2)
 ```
 __Figure 3:__ Key statistical summaries of the Linear Mixed-Effect Model to check salary related variables. \
 
-```{r}
+```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
 #check general relationship between productivity and leadership_for_level for each team
 black_saber_current_employees %>% 
  ggplot(aes(x= leadership_for_level,fill=gender))+
