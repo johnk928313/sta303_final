@@ -28,6 +28,7 @@ library(gtsummary)
 library(gridExtra)
 library(grid)
 library(FrF2)
+library(broom.mixed)
 # this should supress all code and messages
 knitr::opts_chunk$set(include = FALSE)
 ```
