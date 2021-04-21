@@ -369,6 +369,10 @@ Another limitation results from the lack of ethnicity/race data for both the hir
 
 Finally, a limitation may be introduced as a result of implicit evaluation criterions for each hiring phase, especially AI-autograded phase  and remuneration process. If we know how applicants can proceed to the next round in the hiring process, it would be easier to identify what effects are correlated and fit better models. For the remuneration process, if we can know what kinds of employees can be promoted or have higher salary, we will be able to explore more about potential biases.
 
+### Conclusion
+
+We have found that, while there is no gender bias in the hiring process, there are indeed biases when it comes to the employees' salaries and promotion.
+
 \newpage
 # Consultant information
 ## Consultant profiles
