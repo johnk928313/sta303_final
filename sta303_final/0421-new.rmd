@@ -74,7 +74,7 @@ Throughout the analysis, we focused on investigating the fairness in the hiring,
 
 * Does the new AI service in the hiring pipeline work and is reliable for future use? \
 * If the applicants are hired in the hiring process based on their ability and value to BSS? \
-* Is gender a potential bias during the promotion and salary processes? \
+* Are there potential biases within variable groups potentially affecting the salary and promotion of employees? \
 
 \newpage
 ## Possible future use of AI service in the hiring process \
