@@ -270,8 +270,6 @@ __Graph 2:__ General relationship between productivity and leadership_for_level 
 
 ## Discussion
 
-_In this section you will summarize your findings across all the research questions and discuss the strengths and limitations of your work. It doesn't have to be long, but keep in mind that often people will just skim the intro and the discussion of a document like this, so make sure it is useful as a semi-standalone section (doesn't have to be completely standalone like the executive summary)._
-
 First, we explored the effects the various variables during the hiring phases had on the hiring chances. Fitting a model to model the applicant's hiring result (no if not hired, yes if hired) with the applicants' GPA,Curriculum Vitae, cover letter, extracurriculars, and work_experience as effects, it was found that only the GPA and extracurriculars had a significant effect on the being hired.
 
 Second, we explored whether the AI used during the first 2 phases of the hiring process was reliable, and if there were any biases. Fitting a model to model the applicants result on the second phase ("refused" if they did not move on to phase 3, "proceed" if they do move on to phase 3) with the applicants' GPA, extracurriculars, work experience, leadership presence, speaking skills, technical skills, and writing skills as the effects, it was found that GPA, leadership presence, speaking skills, technical skills, and writing skills all have a significant effect on an applicants' success rate.
