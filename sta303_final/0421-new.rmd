@@ -310,6 +310,8 @@ productivity_leadership<-black_saber_current_employees %>%
   ggsave("images/productivity_leadership.png",width = 7, height = 4)
 ```
 
+Figure 2 displays the leadership for level in BSS for different teams separated in gender. It is clear to see that in all teams, most women are considered as needing improvement while employees that exceeds expectations are all men. Hence, it is obviously that gender does become a potential variable that affect empolyees' leadership for level.
+
 ## Discussion
 
 First, we explored the effects the various variables during the hiring phases had on the hiring chances. Fitting a model to model the applicant's hiring result (no if not hired, yes if hired) with the applicants' GPA,Curriculum Vitae, cover letter, extracurriculars, and work_experience as effects, it was found that only the GPA and extracurriculars had a significant effect on the being hired.
