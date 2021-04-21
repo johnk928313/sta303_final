@@ -60,7 +60,10 @@ _This part of the report is much more comprehensive than the executive summary. 
 
 ## Introduction
 
-_Provide a brief introduction to your report and outline what the report will cover. This section is valuable for setting scope and expectations. _
+Recently, several complaints were received related to potential bias in the hiring and remuneration processes. Hence, BSS (Black Saber Software) required our team to take a look and give out a related report for the Board of Directors. The purpose of this study is to investigate if BSS’s hiring, promotion, and salary were processing fairly based on talent and value to the company. We were especially interested in exploring potential gender bias in the hiring and remuneration processes. Besides, we also investigated the performance of the new AI service in the hiring pipeline. Data was provided by the data team from BSS including hiring data for their new graduate program and data for their current employees. 
+
+In this report, we will specify different explanatory and response variables for. Then, we will fit several generalized linear models and a linear mixed effects model to analyze the results. At the end, we will point out the same limitations of our model. The whole report will be run on R.studio and knit into pdf.
+
 
 ### Research questions
 * Does the new AI service in the hiring pipeline work and is reliable for future use?
@@ -202,6 +205,12 @@ Second, we explored whether the AI used during the first 2 phases of the hiring 
 Finally, we took a look to see if the employees' promotions and salaries are fair and justisfied based on the their ability and value to Black Saber Software. We first separated the salaries by gender, and  graphed each teams' employees' salaries against their productivity. We found that there was indeed a bias for gender.It was observed that the salaries of men based on their productivity is almost always inversely related to the salaries of women based on their productivity. What this means is that as a man's productivity goes up, they earn more, while as a woman's productivity goes up, they earn less, and vice versa. This rule is only broken in the Software team, where men and women all earn roughly the same amount. We will not comment on the emloyees who did not disclose their gender as it is not indicitive of bias in gender.
 
 ### Strengths and limitations
+
+One limitation is that we were only provided data on current employees. The data of previous past employees is missing. Regarding the promotion and salary processes, past employees’ information could give us some insights to why they left the company. This could give valuable information such as whether they were treated evenly. If we can get the past employees’ data, we can analyze whether there exist biases during the remuneration process more comprehensively.
+
+Another limitation results from the lack of ethnicity/race data for both the hiring and remuneration processes which could also be a potential bias that we need to check. We were told that the race data was not collected by the People and Talent team but they were considering it for EDI initiatives. The race might also be a factor that would affect the hiring result of applicants and also the promotion and wages processes of employees. 
+
+Finally, a limitation may be introduced as a result of implicit evaluation criterions for each hiring phase, especially AI-autograded phase  and remuneration process. If we know how applicants can proceed to the next round in the hiring process, it would be easier to identify what effects are correlated and fit better models. For the remuneration process, if we can know what kinds of employees can be promoted or have higher salary, we will be able to explore more about potential biases.
 
 \newpage
 # Consultant information
