@@ -22,41 +22,42 @@ titlepage-rule-height: 2
 
 ```{r, message = FALSE, echo=FALSE}
 library(tidyverse)
-library(tidyverse)
+library(dplyr)
 library(lme4)
 library(gtsummary)
+library(gridExtra)
+library(grid)
 # this should supress all code and messages
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(include = FALSE)
 ```
-
-# General comments (you can delete this section)
-
-_You can delete this section, and if you want to check what it said, just open a template from the package again. You don't have to use this particular template, but you DO need to write you report in RMarkdown and include a cover page._
-
-_The cover page must have:_
-
-*	_A title and subtitle_
-* _"Report prepared for Black Saber Software by" your company name_
-*	_Date (assessment submission date is fine)_
-
-_You can change the colour of this cover to any colour you would like by replacing 6C3082 in the YAML above (line 11) to another hex code. You could use this tool to help you:_ https://htmlcolorcodes.com/color-picker/
 
 \newpage
 # Executive summary
 
-_Guidelines for the executive summary:_
+## Background & Aim : \
+Concerns about potential bias in the hiring and remuneration processes were consistently raised internally in Black Saber Software. In order to investigate the true fact for the issues, we SFP were consent to help figure it out. This report was commissioned to examine if potential issues especially gender parity existed in the hiring, promotion and salary processes based on the hiring data and data about promotion and wages for current employees provided by Black Saber Software . Besides, we were interested in the fact how the new trialled AI service performanced in the hiring process. 
 
-* _No more than two pages_
-* _Language is appropriate for a non-technical audience_
-* _Bullet points are used where appropriate_
-*	_A small number of key visualizations and/or tables are included_
-*	_All three research questions are addressed_
+## Key results : \
+* final result vs. productivity \
+* final hiring result vs. gender \
+* AI result good? \
+* promotion vs. productivity \
+* promotion vs. gender \
+* salary vs. productivity \
+* salary vs. gender
 
+## Limitations: \
+We were only offered with data for current employees so it was hard to know reasons past employees left. If additional data related to past employees can be provided, we can have a more deep and comprehensive sight into potential biases;\
+The lack of ethnicity/race data also results in a limitation since race might be a potential exist which might influence the results of hiring pipelines and promotion and amount of wages;\
+No information about the determination methods for hiring results, promotion and amount of salary was provided which limited the accuracy of models we fit for these processes.
+\newpage
+## Figures: \
+Key results are summarized in the following tables or graphs.
+![](images/bar_result_gender.png)
+![](images/AI_scores.png)
 
 \newpage
 # Technical report
-_This part of the report is much more comprehensive than the executive summary. The audience is statistics/data-minded people, but you should NOT include code or unformatted R output here._
-
 
 ## Introduction
 
@@ -65,18 +66,33 @@ Recently, several complaints were received related to potential bias in the hiri
 In this report, we will specify different explanatory and response variables for. Then, we will fit several generalized linear models and a linear mixed effects model to analyze the results. At the end, we will point out the same limitations of our model. The whole report will be run on R.studio and knit into pdf.
 
 
-### Research questions
+## Research questions
 * Does the new AI service in the hiring pipeline work and is reliable for future use?
 * In particular, is gender a potential bias during the promotion and salary processes?
 * If the promotion, and salary process are all fair to all employees and based on their ability and value to BSS?
 
 \newpage
 
-## Relationships between whether a candidate was hired or not and the variables during the entire hiring process
+## Models and Results \
+### Hiring Process for applicants \
+**Relationships between whether a candidate was hired or not and the variables during the entire hiring process**
 
-_For each research question, you will want to briefly describe any data manipulation, show some exploratory plots/summary tables, report on any methods you use (i.e. models you fit) and the conclusions you draw from these_
+We will consider a data set named all_phase combining all necessary data in the hiring process which include four datasets : phase1-new-grad-applicants-2020.csv, phase2-new-grad-applicants-2020.csv, phase3-new-grad-applicants-2020.csv and final-hires-newgrad_2020.csv. Each line of all_phase contains all aggregated information of an applicant in the hiring pipelines. In this analysis for hiring process, the response variable is the 
+Examination of data for hiring process reveals the following key variables in all_phase:
 
-```{r, warning=FALSE, message=F}
+applicant_id = Unique identifier assigned to candidates in Phase 1 \
+team_applied_for = Data or Software \
+gpa = 0.0 to 4.0 \
+extracurriculars = Indicates the quality of extracurricular involvement with scores of 0,1,2 \
+work_experience = Description of candidates’ previous work experience with scores of 0,1,2 \
+technical_skills = Score from 0 to 100 on a timed technical task, AI autograded \
+writing_skills = Score from 0 to 100 on a timed writing task, AI autograded \
+speaking_skills = A rating of speaking skills based on pre-recorded video, AI autograded \
+leadership_presence = A rating of leadership presence based on pre-recorded video, AI autograded \
+final_result = Indicate at which phase applicant was rejected or hired finally \
+result = Show the hiring result for each applicant in each hiring pipeline \
+
+```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
 
 # read in the data
 black_saber_current_employees <- read_csv("data/black-saber-current-employees.csv")
@@ -102,11 +118,55 @@ phase2$result <- ifelse(phase2$applicant_id %in% phase3$applicant_id,"proceed","
 phase3$result <- ifelse(phase3$applicant_id %in% final$applicant_id,"proceed","refused")
 all_phase$result <- ifelse(all_phase$applicant_id %in% final$applicant_id,"Hired","no")
 
-# Create model 1 to see if several response variables are related to the final result.
+# check gender distribution on final results for applicants 
+bar_result_gender<-all_phase %>%
+  ggplot(aes(x=final_result,fill=gender)) +
+  geom_bar(position="fill")+
+  theme_minimal()+
+  labs(x="Final hiring result",
+       y="Percentage",
+       caption = str_c(" Figure1: Proportion of Applicants who were refused in each hiring pipeline or finally hired by gender"))
+ggsave(file="images/bar_result_gender.png", height = 3, width= 8) 
+
+# check AI service biased or not in Phase 2
+AI_technical<-phase2 %>%
+  ggplot(aes(x= gender,y=technical_skills,color=gender)) +
+  geom_boxplot()+
+  theme_minimal()+
+  theme(legend.position = "none",plot.title = element_text(hjust = 0.5, size = 11))+
+  labs(x= "Gender", y="Scores",title="Technical task scores")
+
+AI_writing<-phase2 %>%
+  ggplot(aes(x= gender,y=writing_skills,color=gender)) +
+  geom_boxplot()+
+  theme_minimal()+
+  theme(legend.position = "none",plot.title = element_text(hjust = 0.5, size = 11))+
+  labs(x= "Gender", y="Scores",
+       title="Writing task scores")
+
+AI_speaking<-phase2 %>%
+  ggplot(aes(x= gender,y=speaking_skills,color=gender)) +
+  geom_boxplot()+
+  theme_minimal()+
+  theme(legend.position = "none",plot.title = element_text(hjust = 0.5, size = 11))+
+  labs(x= "Gender",y="Rating",title="Speaking skills rating")
+
+AI_leadership<-phase2 %>%
+  ggplot(aes(x= gender,y=leadership_presence,color=gender)) +
+  geom_boxplot()+
+  theme_minimal()+
+  theme(legend.position = "none",plot.title = element_text(hjust = 0.5, size = 11))+
+  labs(x= "Gender",y="Rating",title="Leadership presence rating")
+
+AI_socres <-grid.arrange(AI_technical, AI_writing, AI_speaking, AI_leadership,
+                         nrow=2,ncol = 2, bottom = textGrob("Figure 3: Distribution of AI-autograded Scores/Ratings by Gender in the Phase 2, \n\nThe horizontal line in each box represents the median of scores which separates the top 50% scores from the\n lowest 50%. The horizontal lines at the top and bottom for each box represent the lowest 75% and 25% of the\n scores respectively. The ends of vertical lines give the full range of scores, with some dots representing \nextreme values away from the box.", x = 0.05, y = 0.6, just = "left", gp = gpar(fontsize = 9)))
+ggsave(file="images/AI_scores.png", AI_socres ,height = 3.5)
+
 ```
 
 
-```{r, warning=F}
+```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
+# Create model 1 to see if several response variables are related to the final result.
 model_1 <- glm(as.factor(result) ~ gpa+cv+cover_letter+extracurriculars+work_experience,
                data = all_phase, family = binomial("logit"))
 
@@ -114,10 +174,12 @@ tbl_regression(model_1)
 
 #Create model 2 to see AI score preference
 ```
-model_1
+__Figure 1:__ Overall Key statistical summaries of the Generalized Linear Model related to accepted applicant. \
 
-## Is the AI used during the hiring process reliable.
-```{r}
+\newpage
+
+**Is the AI used during the hiring process reliable?**
+```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
 model_2 <- glm(as.factor(result) ~ gpa+extracurriculars+work_experience+leadership_presence+
                  speaking_skills+technical_skills+writing_skills, 
                data = phase2, family = binomial("logit"))
@@ -125,12 +187,22 @@ model_2 <- glm(as.factor(result) ~ gpa+extracurriculars+work_experience+leadersh
 tbl_regression(model_2)
 
 ```
-model_2
+__Figure 2:__ Key statistical summaries of the Generalized Linear Model related to AI scoring in phase 2. \
 
 \newpage 
 
-## Relationships between Gender, Promotion, and Salary
-```{r}
+### Promotion and Salary Processes for current employees
+
+In the current employee data set, we have selected gender, team, leadership_for_level, productivity, and salary. Based on the label dictionary, obtained along with the data, each variables represent the following:
+
+employee_id = Unique 5-digit employee identifier \
+gender =  Gender of employee: man, woman, prefer not to say \
+team = one of the 8 teams which each employee works for \
+leadership_for_level =  if the employee is appropriate for level, need improvements or exceeds expectations \
+productivity = work output with respect to job description rated on a 0 - 100 scale \
+salary = salary at the given financial quarter \
+
+```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
 ## gender, promotion, and salary
 
 # clean the salary data for further analysis
@@ -146,7 +218,7 @@ black_saber_current_employees$role_seniority<-as.factor(black_saber_current_empl
 black_saber_current_employees$leadership_for_level<-as.factor(black_saber_current_employees$leadership_for_level)
 ```
 
-```{r}
+```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
 # check general relationship between productivity and salary for each team
 black_saber_current_employees %>% 
  ggplot(aes(x= productivity,y=salary,color=gender))+
@@ -161,24 +233,26 @@ black_saber_current_employees %>%
        caption = str_c("Prepared by SFP\n",Sys.Date()))
 ggsave("images/productivity_salary.png",width = 7, height = 4)
 ```
+__Graph 1:__ General relationship between productivity and salary for each team separated by gender. \
 
-```{r}
+```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
 #models to check if salary is related to other variables
 mod_1 <-lmer(salary~gender+team+(1|employee_id),
              data=black_saber_current_employees)
 summary(mod_1)
 ```
 
-```{r, warning=F, message=FALSE}
+```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
 mod_2 <-lmer(salary~gender+team+role_seniority+productivity+leadership_for_level+(1|employee_id:team)+(1|employee_id),data=black_saber_current_employees)
 summary(mod_2)
 ```
 
-```{r}
+```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
 lmtest::lrtest(mod_1,mod_2)
 ```
+__Figure 3:__ Key statistical summaries of the Linear Mixed-Effect Model to check salary related variables. \
 
-```{r}
+```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
 #check general relationship between productivity and leadership_for_level for each team
 black_saber_current_employees %>% 
  ggplot(aes(x= leadership_for_level,fill=gender))+
@@ -192,7 +266,7 @@ black_saber_current_employees %>%
   scale_x_discrete(guide = guide_axis(n.dodge = 3))
   ggsave("images/productivity_leadership.png",width = 7, height = 4)
 ```
-
+__Graph 2:__ General relationship between productivity and leadership_for_level for each team separated by gender. \
 
 ## Discussion
 
@@ -204,11 +278,13 @@ Second, we explored whether the AI used during the first 2 phases of the hiring 
 
 Finally, we took a look to see if the employees' promotions and salaries are fair and justisfied based on the their ability and value to Black Saber Software. We first separated the salaries by gender, and  graphed each teams' employees' salaries against their productivity. We found that there was indeed a bias for gender.It was observed that the salaries of men based on their productivity is almost always inversely related to the salaries of women based on their productivity. What this means is that as a man's productivity goes up, they earn more, while as a woman's productivity goes up, they earn less, and vice versa. This rule is only broken in the Software team, where men and women all earn roughly the same amount. We will not comment on the emloyees who did not disclose their gender as it is not indicitive of bias in gender.
 
-### Strengths and limitations
+## Limitations
 
 One limitation is that we were only provided data on current employees. The data of previous past employees is missing. Regarding the promotion and salary processes, past employees’ information could give us some insights to why they left the company. This could give valuable information such as whether they were treated evenly. If we can get the past employees’ data, we can analyze whether there exist biases during the remuneration process more comprehensively.
 
+
 Another limitation results from the lack of ethnicity/race data for both the hiring and remuneration processes which could also be a potential bias that we need to check. We were told that the race data was not collected by the People and Talent team but they were considering it for EDI initiatives. The race might also be a factor that would affect the hiring result of applicants and also the promotion and wages processes of employees. 
+
 
 Finally, a limitation may be introduced as a result of implicit evaluation criterions for each hiring phase, especially AI-autograded phase  and remuneration process. If we know how applicants can proceed to the next round in the hiring process, it would be easier to identify what effects are correlated and fit better models. For the remuneration process, if we can know what kinds of employees can be promoted or have higher salary, we will be able to explore more about potential biases.
 
@@ -227,10 +303,12 @@ Finally, a limitation may be introduced as a result of implicit evaluation crite
 
 ## Code of ethical conduct
 
-_This section should be fairly short, no more than half a page. Assume a general audience, much like your executive summary._
+SFP is a statistical consulting company. Our mission is to help our clients solve their problems and give them professional and practical advice. We, all staff in SFP adhere to the Code of Ethics Conduct as outlined below.
 
-* _Make at least three relevant statements about your company’s approach to ethical statistical consulting. These should be appropriately in line with professional conduct advice like the (Statistical Society of Canada Code of Conduct)[https://ssc.ca/sites/default/files/data/Members/public/Accreditation/ethics_e.pdf] or the (Ethical Guidelines for Statistical Practice from the American Statistical Society)[https://www.amstat.org/ASA/Your-Career/Ethical-Guidelines-for-Statistical-Practice.aspx]. For example, "the customer is always right" ISN’T the type of thing an ethical statistical consultant would include._
-*	_Be very careful not to just copy and paste from these other documents! Put things in your own words._
+**Professional Integrity and Accountability: ** We always serve our clients with integrity and respect. No fabricated or altered data that deliberately affects the results will be used. We promise to be fully qualified with accepted work and be honest to clients if any limitation of competence exists. Appropriate and relevant statistical methods are always used to produce reliable results. All results and conclusions should be clearly explained in detail with statistical data and valid analytic approaches. 
+
+**Responsibilities to clients: ** We treat all clients’ information confidential and responsible. No client’s information should be disclosed or discussed in public without permissions of the clients. We will protect any sensitive data or results from unauthorized people and will not take advantage of them to make profit. 
+
+**Responsibilities to other statisticians: ** We always safeguard the reputation of statistical practice and try to enhance our professionalism. We support and help strengthen the work of other fellow statisticians through valuable peer view. No criticism is allowed to cast on individuals rather than on problems. Even in debates, we should be respectful of others.
 
 
-__Final advice: KNIT EARLY AND OFTEN!__
