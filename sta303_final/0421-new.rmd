@@ -27,7 +27,6 @@ library(lme4)
 library(gtsummary)
 library(gridExtra)
 library(grid)
-library(kableExtra)
 library("FrF2")
 # this should supress all code and messages
 knitr::opts_chunk$set(include = FALSE)
@@ -281,8 +280,8 @@ lrt_table_data['Chisq'] <- round(lrt_table_data['Chisq'],0)
 lrt_table_data <- sapply(lrt_table_data, as.character)
 lrt_table_data[is.na(lrt_table_data)] <- " "
 
-kable( lrt_table_data, align = "lllll", booktabs = T) %>%
-  kable_styling(full_width = T)
+knitr::kable( lrt_table_data)
+
 ```
 __Figure 3:__ Key statistical summaries of the Linear Mixed-Effect Model to check salary related variables. \
 
