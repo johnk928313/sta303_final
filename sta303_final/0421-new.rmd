@@ -95,7 +95,7 @@ Examination of data for hiring process reveals the following key variables in al
 |final_result | Indicate at which phase applicant was rejected or hired finally |
 |result |Show the hiring result for each applicant in each hiring pipeline |
 
-\newpage
+
 
 **\underline{Data Wrangling and Visualization}**\
 
@@ -168,7 +168,6 @@ ggsave(file="images/AI_scores.png", AI_socres ,height = 3.5)
 
 Figure 1 presented a five-number summary: the minimum, the maximum, the sample median, and the first and third quartiles based on different genders for the scores or ratings by AI service. We can see generally there is no difference of scores or ratings between man and women since in all the four plots, man and women gave the similar five-number smmary results. But in the technical task scores plot, the boxplot for people with gender prefer not to say was not overlapped with other two boxplots for man and woman so there might be a significant difference between gender in scores rated by AI and we need to do further analysis.
 
-\newpage
 
 **\underline{Models and Results}**\
 
@@ -196,7 +195,7 @@ tbl_regression(model_2, exponentiate = TRUE)
 
 __Table 2:__ Key statistical summaries of the Generalized Linear Model related to AI scoring in phase 2. \
 
-\newpage
+
 ## Gender bias in the hiring process
 **\underline{Data Organization, Data Wrangling and Visulization}**  \
 In this part, we kept using the dataset in the first reasearch question. In order to investigate whether it is fair in the hiring process, we made barplots for final result by gender and also boxplot for gpa to check if final hired candidates had higher gpa than rejected ones.
@@ -245,8 +244,6 @@ As we can see in Figure 3, the boxplot for gpa of candidates grouped by gender a
   
   
   
-\newpage 
-
 ## A potential gender bias in the salary and promotion processes
 **\underline{Data Organization}** 
 In the current employee data set, we have selected gender, team, leadership_for_level, productivity, and salary. We will focus on the following variables from black-saber-current-employees.csv: \
@@ -346,7 +343,6 @@ lrt_table_data[is.na(lrt_table_data)] <- " "
 knitr::kable( lrt_table_data)
 
 ```
-
 __Table 5:__ Comparison between two different Linear Mixed-Effect Model.  \
 
 
