@@ -197,6 +197,12 @@ Second, we explored whether the AI used during the first 2 phases of the hiring 
 
 ### Strengths and limitations
 
+One limitation is that we were only provided data on current employees. The data of previous past employees is missing. Regarding the promotion and salary processes, past employees’ information could give us some insights to why they left the company. This could give valuable information such as whether they were treated evenly. If we can get the past employees’ data, we can analyze whether there exist biases during the remuneration process more comprehensively.
+
+Another limitation results from the lack of ethnicity/race data for both the hiring and remuneration processes which could also be a potential bias that we need to check. We were told that the race data was not collected by the People and Talent team but they were considering it for EDI initiatives. The race might also be a factor that would affect the hiring result of applicants and also the promotion and wages processes of employees. 
+
+Finally, a limitation may be introduced as a result of implicit evaluation criterions for each hiring phase, especially AI-autograded phase  and remuneration process. If we know how applicants can proceed to the next round in the hiring process, it would be easier to identify what effects are correlated and fit better models. For the remuneration process, if we can know what kinds of employees can be promoted or have higher salary, we will be able to explore more about potential biases.
+
 \newpage
 # Consultant information
 ## Consultant profiles
