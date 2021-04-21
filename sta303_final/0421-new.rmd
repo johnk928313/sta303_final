@@ -274,7 +274,6 @@ tbl_regression(mod_2)
 ```
 
 ```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
-lmtest::lrtest(mod_1,mod_2)
 
 lrt_table_data <- data.frame(unclass(lmtest::lrtest(mod_1,mod_2)), check.names = FALSE, stringsAsFactors = FALSE)
 lrt_table_data['LogLik'] <- round(lrt_table_data['LogLik'], 0)
