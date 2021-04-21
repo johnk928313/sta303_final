@@ -1,19 +1,18 @@
 ---
 title: "Analysis of fairness based on talent and value in the hiring and remuneration processes"
-subtitle:"A special focus on gender parity"
+subtitle: "A special focus on gender parity"
 author: "Report prepared for Black Saber Software by SFP"
 date: '2021-04-21'
 output:
-  html_document:
-    toc: yes
-    toc_depth: '2'
-    df_print: paged
   pdf_document:
     template: report.tex
     toc: yes
     toc_depth: 2
+  html_document:
+    toc: yes
+    toc_depth: '2'
+    df_print: paged
 lang: en
-subtitle: Subtitle
 titlepage: yes
 titlepage-color: 6C3082
 titlepage-text-color: FFFFFF
@@ -64,16 +63,17 @@ _This part of the report is much more comprehensive than the executive summary. 
 _Provide a brief introduction to your report and outline what the report will cover. This section is valuable for setting scope and expectations. _
 
 ### Research questions
-* If the promotion, and salary process are all fair to all employees and based on their ability and value to BSS?
 * Does the new AI service in the hiring pipeline work and is reliable for future use?
 * In particular, is gender a potential bias during the promotion and salary processes?
+* If the promotion, and salary process are all fair to all employees and based on their ability and value to BSS?
 
-## Informative title for section addressing a research question
+\newpage
+
+## Relationships between whether a candidate was hired or not and the variables during the entire hiring process
 
 _For each research question, you will want to briefly describe any data manipulation, show some exploratory plots/summary tables, report on any methods you use (i.e. models you fit) and the conclusions you draw from these_
 
 ```{r, warning=FALSE, message=F}
-# This chunk provides an example of some things you can do with RMarkdown to make your report creation process easier
 
 # read in the data
 black_saber_current_employees <- read_csv("data/black-saber-current-employees.csv")
@@ -102,6 +102,7 @@ all_phase$result <- ifelse(all_phase$applicant_id %in% final$applicant_id,"Hired
 # Create model 1 to see if several response variables are related to the final result.
 ```
 
+
 ```{r, warning=F}
 model_1 <- glm(as.factor(result) ~ gpa+cv+cover_letter+extracurriculars+work_experience,
                data = all_phase, family = binomial("logit"))
@@ -111,6 +112,8 @@ tbl_regression(model_1)
 #Create model 2 to see AI score preference
 ```
 model_1
+
+## Is the AI used during the hiring process reliable.
 ```{r}
 model_2 <- glm(as.factor(result) ~ gpa+extracurriculars+work_experience+leadership_presence+
                  speaking_skills+technical_skills+writing_skills, 
@@ -120,6 +123,10 @@ tbl_regression(model_2)
 
 ```
 model_2
+
+\newpage 
+
+## Relationships between Gender, Promotion, and Salary
 ```{r}
 ## gender, promotion, and salary
 
@@ -177,20 +184,13 @@ black_saber_current_employees %>%
 ```
 
 
-
-
-
-
-## Informative title for section addressing a research question
-## Informative title for section addressing a research question
-
-```{r, include = FALSE}
-
-```
-
 ## Discussion
 
 _In this section you will summarize your findings across all the research questions and discuss the strengths and limitations of your work. It doesn't have to be long, but keep in mind that often people will just skim the intro and the discussion of a document like this, so make sure it is useful as a semi-standalone section (doesn't have to be completely standalone like the executive summary)._
+
+First, we explored the effects the various variables during the hiring phases had on the hiring chances. Fitting a model to model the applicant's hiring result (no if not hired, yes if hired) against the applicant's GPA,Curriculum Vitae, cover letter, extracurriculars, and work_experience, it was found that only the GPA and extracurriculars had a significant effect on the being hired, with p-values of 0.009 and 0.042 respectively.
+
+Second, we explored whether the AI used during the first 2 phases of the hiring process was reliable, and if there were any biases.
 
 ### Strengths and limitations
 
