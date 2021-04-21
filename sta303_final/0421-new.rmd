@@ -320,6 +320,7 @@ ggsave("images/productivity_salary_summary.png",width = 7, height = 3.1)
 ![](images/productivity_salary.png)
  In Figure 5, current employees with higher productivity had salaries especially for those who prefer not to say their gender in most teams which indicates potential bias existed in the salary process.
 
+Table 3 is a summary of a linear mixed effect model to estimate the salary by gender, team and employee id (random effect). 
 
 ```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
 #models to check if salary is related to other variables
@@ -329,6 +330,8 @@ tbl_regression(mod_1)
 ```
 
 __Table 3:__ Key statistical summaries of the Linear Mixed-Effect Model to check salary related variables. \
+
+Table 4 is a summary of a linear mixed effect model to estimate the salary by gender, team, role seniority, productivity, leadership for the level, interactive terms (employee id and team),  random effect (employee id). 
 
 ```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
 mod_2 <-lmer(salary~gender+team+role_seniority+productivity+leadership_for_level+(1|employee_id:team)+(1|employee_id),data=black_saber_current_employees)
@@ -349,6 +352,20 @@ knitr::kable( lrt_table_data)
 
 ```
 __Table 5:__ Comparison between two different Linear Mixed-Effect Model.  \
+
+By comparing the linear model used in table 3 and table 4, we see that the log-likelihood for table 3 model is larger with a p-value close to 0. This suggests that the model used in table 4 is a better model that encompases the effect of variables on salary. Therefore, we would want to interpret table 4 to see if there are potential biases.
+
+Table 4 shows a similar result as table 3. 
+
+If we look at the differences in salary between gender characteristics, men tend to earn 2239 dollars more compared to women with statistical significance at the 0.05 level which is confirmed by the 95% CI in the table. 
+
+Next, looking at the difference in salary between teams, Client services tend to earn less compared to data, legal & finance, and software teams with statistical significance at the 0.05 level which is confirmed by the 95% CI in the table. 
+
+Looking at the differences in salary between role seniority, Directors tend to earn much more than other levels except for vice president as expected with statistical significance at the 0.05 level which is confirmed by the 95% CI in the table. 
+
+Finally, when we look at the differences in salary between leadership for level, employees who are appropriate for their level tend to earn 245 dollars more compared to employees who need to improve in performance with statistical significance at the 0.05 level which is confirmed by the 95% CI in the table. On the other hand, employees who exceed expectations do not show statistically significant results to be compared with employees at the appropriate level. 
+
+In conclusion, there does seem to be biases within gender, team, role seniority, and productivity illustrated in table 4. Going back to our research question, there does seem to be biases within gender, team, role seniority, and productivity affecting the salary of employees within the data given by Black Saber Software on current employees.
 
 
 ## Discussion
