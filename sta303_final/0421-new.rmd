@@ -28,6 +28,7 @@ library(gtsummary)
 library(gridExtra)
 library(grid)
 library(FrF2)
+library(broom.mixed)
 # this should supress all code and messages
 knitr::opts_chunk$set(include = FALSE)
 ```
@@ -321,7 +322,6 @@ ggsave("images/productivity_salary_summary.png",width = 7, height = 3.1)
 
 
 ```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
-
 #models to check if salary is related to other variables
 mod_1 <-lmer(salary~gender+team+(1|employee_id),
              data=black_saber_current_employees)
