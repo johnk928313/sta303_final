@@ -170,47 +170,81 @@ Figure 1 presented a five-number summary: the minimum, the maximum, the sample m
 
 \newpage
 
-**\underline{Models}**\
+**\underline{Models and Results}**\
 
 Since our response variable has only two levels : hired or no which is equivalent to binary variale, generalized linear model came out immediately. As we were interested in studying whether AI service was reliable in the hiring process without potential bias, we created two different models to determine whether including the grades made by AI service. In the first model, we checked if variables in the pahse 1 are related to the final result. The second model, we contained all covariates in the phase 2 to check whether AI service had effect on the final result. \
 From the p-value from result of the first model, we found that gpa and gender are significant since the p-values are smaller than 0.05. So we included them in the next model to have further analysis in order to check whether gender had impact on the hiring results. In the result of the second model, we found that gpa, leadership presence rating, speaking skills rating, technical task scores and writing task scores are all significant since the p-value is less than 0.05. Therefore, there is significant evidence that all scores and ratings made by AI service are associated with the final hiring result. And there is no evidence that gender effects the final result by using AI service. Therefore, we can conclude that AI service works and is reliable for future use without gender bias.
 
 
 ```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
-# Create model 1 to see if several response variables are related to the final result.
-model_1 <- glm(as.factor(result) ~ gpa+cv+cover_letter+extracurriculars+work_experience,
+# Create model 1 to see if variables in the pahse 1 are related to the final result.
+model_1 <- glm(as.factor(result) ~ gpa+gender+extracurriculars+work_experience,
                data = all_phase, family = binomial("logit"))
-tbl_regression(model_1)
-#Create model 2 to see AI score preference
+tbl_regression(model_1,exponentiate = TRUE)
 ```
 
 __Table 1:__ Overall Key statistical summaries of the Generalized Linear Model related to accepted applicant. \
 
 
 ```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
-model_2 <- glm(as.factor(result) ~ gpa+extracurriculars+work_experience+leadership_presence+
+#Create model 2 to see AI score preference
+model_2 <- glm(as.factor(result) ~ gpa+gender+leadership_presence+
                  speaking_skills+technical_skills+writing_skills, 
                data = phase2, family = binomial("logit"))
-tbl_regression(model_2)
+tbl_regression(model_2, exponentiate = TRUE)
 ```
 
 __Table 2:__ Key statistical summaries of the Generalized Linear Model related to AI scoring in phase 2. \
 
 \newpage
+## Gender bias in the hiring process
+**\underline{Data Organization, Data Wrangling and Visulization}**  \
+In this part, we kept using the dataset in the first reasearch question. In order to investigate whether it is fair in the hiring process, we made barplots for final result by gender and also boxplot for gpa to check if final hired candidates had higher gpa than rejected ones.
 
 ```{r gender_parity}
 # check gender distribution on final results for applicants 
+result_gender<-all_phase %>%
+  ggplot(aes(x=final_result,fill=gender)) +
+  geom_bar(position="fill")+
+  theme_minimal()+
+  labs(x="hiring result for each phase",
+       y="Percentage",
+       caption = str_c(" Figure 2: Proportion of Applicants who were refused in each hiring pipeline or finally hired by gender"))
+ggsave(file="images/result_gender.png", height = 4, width=8)
+
+# check gpa summary on final results for applicants 
+gpa_result<-all_phase %>%
+ggplot(aes(x = factor(result), 
+           y = gpa, 
+           color = gender)) +
+  geom_boxplot() +
+  theme_minimal()+
+  labs(x="Final hiring result",
+       y="GPA",
+       caption = str_c(" Figure 3: GPA summary of candidates who were refused in the hiring phases or finally hired by gender"))
+ggsave(file="images/gpa_result.png", height = 4, width=8)
+
+# save it for executive summary
 bar_result_gender<-all_phase %>%
   ggplot(aes(x=final_result,fill=gender)) +
   geom_bar(position="fill")+
   theme_minimal()+
-  labs(x="Final hiring result",
+  labs(x="hiring result for each phase",
        y="Percentage",
-       caption = str_c(" Figure1: Proportion of Applicants who were refused in each hiring pipeline or finally hired by gender"))
+       caption = str_c(" Figure 1: Proportion of Applicants who were refused in each hiring pipeline or finally hired by gender"))
 ggsave(file="images/bar_result_gender.png", height = 2.7, width=8)
 
 ```
+![](images/result_gender.png)
+In Figure 2, the percentage of applicants who can proceed from the first and second phases to the next phase was approximately evenly split between gender. However, a larger percentage of women were rejected at phase 3 than that of men. And all applicants who prefer not to say gender were rejected at phase 3. Therefore, there is a significantly uneven distribution on gender for all hired candidates. \
+![](images/gpa_result.png)
+As we can see in Figure 3, the boxplot for gpa of candidates grouped by gender and fianl hiring result, applicants who got hired have higher average of gpa than those who were rejected before. And there was no significant difference in gpa for those who got hired between gender. 
 
+**\underline{Results}** \
+  From the plot, we found that the final hired people did have higher gpa than the rejected ones. In order to check whethere the hiring process is fair, we can refer to the previous models we made for our first research problems. We found that in the result of model 1, gender is a significant variable while in model 2, gender is not a significant variable that had effects on the final hiring result. We might believe that no potential bias exists in the hiring phase 2 where we used AI service but there exist gender bias in the other phases.
+  
+  
+  
 \newpage 
 
 ## A potential gender bias in the salary and promotion processes
@@ -227,6 +261,7 @@ In the current employee data set, we have selected gender, team, leadership_for_
 |salary | salary at the given financial quarter |
 
 **\underline{Data Wrangling and Visualization}** 
+ We foun that in the dataset for the current employees, the salary is saved as character rather than number so we did some data wrangling and change other data type for future use.
 ```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
 ## gender, promotion, and salary
 # clean the salary data for further analysis
@@ -240,7 +275,7 @@ black_saber_current_employees$team<-as.factor(black_saber_current_employees$team
 black_saber_current_employees$role_seniority<-as.factor(black_saber_current_employees$role_seniority)
 black_saber_current_employees$leadership_for_level<-as.factor(black_saber_current_employees$leadership_for_level)
 ```
-
+ In order to explore whether gender bias existed in the promotion and salary process, we made several plots to show the relationship between salary, promotion and gender more clearly.
 ```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
 #check general relationship between productivity and leadership_for_level for each team
 productivity_leadership<-black_saber_current_employees %>% 
@@ -250,7 +285,7 @@ productivity_leadership<-black_saber_current_employees %>%
   facet_wrap(~team)+
   labs(x="Percentage",
        y="Leadership for level",
-       caption = str_c("Figure 3:Proportion of current employees with different leadership level by gender for each group"))+
+       caption = str_c("Figure 4:Proportion of current employees with different leadership level by gender for each group"))+
    scale_x_discrete(guide = guide_axis(n.dodge = 3))
   ggsave("images/productivity_leadership.png",width = 7, height = 4)
   
@@ -263,7 +298,7 @@ productivity_salary<-black_saber_current_employees %>%
   facet_wrap(~team) +
   theme_minimal()+
   labs(x= "Productivity",y="Salary",
-       caption = str_c("Figure4: Relationship between productivity and salary in each team by gender"))
+       caption = str_c("Figure 5: Relationship between productivity and salary in each team by gender"))
 ggsave("images/productivity_salary.png",width = 7, height = 4)
 
 # Figure for executive summary
@@ -275,13 +310,13 @@ productivity_salary_summary<-black_saber_current_employees %>%
   facet_wrap(~team) +
   theme_minimal()+
   labs(x= "Productivity",y="Salary",
-       caption = str_c("Figure3: Relationship between productivity and salary for all eight teams by gender "))
+       caption = str_c("Figure 3: Relationship between productivity and salary for all eight teams by gender "))
 ggsave("images/productivity_salary_summary.png",width = 7, height = 3.1)
 ```
 ![](images/productivity_leadership.png)
-  Figure 3 displays the leadership for level in BSS for different teams separated in gender. It is clear to see that in all teams, most women are considered as needing improvement while employees that exceeds expectations are all men. Hence, it is obviously that gender does become a potential variable that affect empolyees' leadership for level. \
+  Figure 4 displays the leadership for level in BSS for different teams separated in gender. It is clear to see that in all teams, most women are considered as needing improvement while employees that exceeds expectations are all men. Hence, it is obviously that gender does become a potential variable that affect empolyees' leadership for level. \
 ![](images/productivity_salary.png)
- In Figure 4, current employees with higher productivity had lower productivity especially for those who prefer not to say their gender in most of teams which indicates potential bias existed in the salary process.
+ In Figure 5, current employees with higher productivity had lower productivity especially for those who prefer not to say their gender in most of teams which indicates potential bias existed in the salary process.
 
 
 ```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
