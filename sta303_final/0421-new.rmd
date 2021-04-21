@@ -1,5 +1,5 @@
 ---
-title: "Analysis of fairness based on talent and value in hiring and remuneration processes"
+title: "Analysis of fairness in hiring and remuneration processes"
 subtitle: "A special focus on gender parity"
 author: "Report prepared for Black Saber Software by SFP"
 date: '2021-04-21'
