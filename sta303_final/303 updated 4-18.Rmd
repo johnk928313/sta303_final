@@ -1,5 +1,5 @@
 ---
-title: "Analysis of fairness based on talent and value in the hiring and remuneration processes"
+title: "Analysis of fairness based on talent and value in hiring and remuneration processes"
 subtitle: "A special focus on gender parity"
 author: "Report prepared for Black Saber Software by SFP"
 date: '2021-04-21'
@@ -68,15 +68,14 @@ In this report, we will specify different explanatory and response variables for
 
 
 ## Research questions
+Throughout the analysis, we focused on investigating the fairness in the hiring, promoting, and salary processes at Black Saber Software. Below are our questions of interest:\
 * Does the new AI service in the hiring pipeline work and is reliable for future use?
 * In particular, is gender a potential bias during the promotion and salary processes?
-* If the promotion, and salary process are all fair to all employees and based on their ability and value to BSS?
+* If the hiring, promotion, and salary process are all fair to all employees and based on their ability and value to BSS?
 
 \newpage
-
-## Models and Results \
-### Hiring Process for applicants \
-**Relationships between whether a candidate was hired or not and the variables during the entire hiring process**
+### Possible future use of AI service in the hiring process \
+**\underline{Data Organization}**  
 
 We will consider a data set named all_phase combining all necessary data in the hiring process which include four datasets : phase1-new-grad-applicants-2020.csv, phase2-new-grad-applicants-2020.csv, phase3-new-grad-applicants-2020.csv and final-hires-newgrad_2020.csv. Each line of all_phase contains all aggregated information of an applicant in the hiring pipelines. In this analysis for hiring process, the response variable is the 
 Examination of data for hiring process reveals the following key variables in all_phase:
@@ -191,7 +190,7 @@ __Figure 2:__ Key statistical summaries of the Generalized Linear Model related 
 
 \newpage 
 
-### Promotion and Salary Processes for current employees
+### A potential gender bias in the salary and promotion processes
 
 In the current employee data set, we have selected gender, team, leadership_for_level, productivity, and salary. Based on the label dictionary, obtained along with the data, each variables represent the following:
 
@@ -286,7 +285,7 @@ Second, we explored whether the AI used during the first 2 phases of the hiring 
 
 Finally, we took a look to see if the employees' promotions and salaries are fair and justisfied based on the their ability and value to Black Saber Software. We first separated the salaries by gender, and  graphed each teams' employees' salaries against their productivity. We found that there was indeed a bias for gender.It was observed that the salaries of men based on their productivity is almost always inversely related to the salaries of women based on their productivity. What this means is that as a man's productivity goes up, they earn more, while as a woman's productivity goes up, they earn less, and vice versa. This rule is only broken in the Software team, where men and women all earn roughly the same amount. We will not comment on the emloyees who did not disclose their gender as it is not indicitive of bias in gender.
 
-## Limitations
+### Limitations
 
 One limitation is that we were only provided data on current employees. The data of previous past employees is missing. Regarding the promotion and salary processes, past employees’ information could give us some insights to why they left the company. This could give valuable information such as whether they were treated evenly. If we can get the past employees’ data, we can analyze whether there exist biases during the remuneration process more comprehensively.
 
