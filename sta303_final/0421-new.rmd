@@ -318,7 +318,7 @@ ggsave("images/productivity_salary_summary.png",width = 7, height = 3.1)
 ![](images/productivity_leadership.png)
   Figure 4 displays the leadership for level in BSS for different teams separated in gender. It is clear to see that in all teams, most women are considered as needing improvement while employees that exceeds expectations are all men. Hence, it is obviously that gender does become a potential variable that affect employees' leadership for level. \
 ![](images/productivity_salary.png)
- In Figure 5, current employees with higher productivity had lower productivity especially for those who prefer not to say their gender in most teams which indicates potential bias existed in the salary process.
+ In Figure 5, current employees with higher productivity had salaries especially for those who prefer not to say their gender in most teams which indicates potential bias existed in the salary process.
 
 
 ```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
