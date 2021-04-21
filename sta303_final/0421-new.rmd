@@ -70,13 +70,14 @@ In this report, we will specify different explanatory and response variables for
 
 ## Research questions
 Throughout the analysis, we focused on investigating the fairness in the hiring, promoting, and salary processes at Black Saber Software. Below are our questions of interest:\
+
 * Does the new AI service in the hiring pipeline work and is reliable for future use? \
 * If the applicantes are hired in the hiring process based on their ability and value to BSS? \
 * Is gender a potential bias during the promotion and salary processes? \
 
 \newpage
 ## Possible future use of AI service in the hiring process \
-**\underline{Data Organization}**  
+**\underline{Data Organization}**  \
 
 We considered a data set named all_phase combining all necessary data in the hiring process which include four datasets : phase1-new-grad-applicants-2020.csv, phase2-new-grad-applicants-2020.csv, phase3-new-grad-applicants-2020.csv and final-hires-newgrad_2020.csv. Each line of all_phase contains all aggregated information of an applicant in the hiring pipelines. In this analysis for hiring process, the response variable is the result.
 Examination of data for hiring process reveals the following key variables in all_phase:\
@@ -198,6 +199,7 @@ __Table 2:__ Key statistical summaries of the Generalized Linear Model related t
 
 ## Gender bias in the hiring process
 **\underline{Data Organization, Data Wrangling and Visulization}**  \
+
 In this part, we kept using the dataset in the first reasearch question. In order to investigate whether it is fair in the hiring process, we made barplots for final result by gender and also boxplot for gpa to check if final hired candidates had higher gpa than rejected ones.
 
 ```{r gender_parity}
@@ -245,7 +247,8 @@ As we can see in Figure 3, the boxplot for gpa of candidates grouped by gender a
   
   
 ## A potential gender bias in the salary and promotion processes
-**\underline{Data Organization}** 
+**\underline{Data Organization}** \
+
 In the current employee data set, we have selected gender, team, leadership_for_level, productivity, and salary. We will focus on the following variables from black-saber-current-employees.csv: \
 
 |Variable | Description |
@@ -257,7 +260,8 @@ In the current employee data set, we have selected gender, team, leadership_for_
 |productivity | work output with respect to job description rated on a 0 - 100 scale|
 |salary | salary at the given financial quarter |
 
-**\underline{Data Wrangling and Visualization}** 
+**\underline{Data Wrangling and Visualization}** \
+
  We foun that in the dataset for the current employees, the salary is saved as character rather than number so we did some data wrangling and change other data type for future use.
 ```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
 ## gender, promotion, and salary
