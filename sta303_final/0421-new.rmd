@@ -320,6 +320,8 @@ ggsave("images/productivity_salary_summary.png",width = 7, height = 3.1)
 ![](images/productivity_salary.png)
  In Figure 5, current employees with higher productivity had salaries especially for those who prefer not to say their gender in most teams which indicates potential bias existed in the salary process. \
 
+**\underline{Models and Results}**\ 
+
 Table 3 is a summary of a linear mixed effect model to estimate the salary by gender, team and employee id (random effect). 
 
 ```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
