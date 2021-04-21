@@ -24,7 +24,8 @@ titlepage-rule-height: 2
 library(tidyverse)
 library(lme4)
 library(gtsummary)
-
+library(kableExtra)
+library("FrF2")
 # this should supress all code and messages
 knitr::opts_chunk$set(echo = FALSE)
 ```
@@ -127,7 +128,6 @@ model_1 <- glm(as.factor(result) ~ gpa+cv+cover_letter+extracurriculars+work_exp
 tbl_regression(model_1)
 #Create model 2 to see AI score preference
 ```
-model_1
 
 **Is the AI used during the hiring process reliable.**
 ```{r}
@@ -136,7 +136,6 @@ model_2 <- glm(as.factor(result) ~ gpa+extracurriculars+work_experience+leadersh
                data = phase2, family = binomial("logit"))
 tbl_regression(model_2)
 ```
-model_2
 
 \newpage 
 
@@ -186,10 +185,24 @@ ggsave("images/productivity_salary.png",width = 7, height = 4)
 mod_1 <-lmer(salary~gender+team+(1|employee_id),
              data=black_saber_current_employees)
 summary(mod_1)
+
+#tab_model(mod_1)
+tbl_regression(mod_1)
+
+```
+
+
+```{r}
 mod_2 <-lmer(salary~gender+team+role_seniority+productivity+leadership_for_level+(1|employee_id:team)+(1|employee_id),data=black_saber_current_employees)
 lmtest::lrtest(mod_1,mod_2)
+lrt_table_data <- data.frame(unclass(lmtest::lrtest(mod_1,mod_2)), check.names = FALSE, stringsAsFactors = FALSE)
+lrt_table_data['LogLik'] <- round(lrt_table_data['LogLik'], 0)
+lrt_table_data['Chisq'] <- round(lrt_table_data['Chisq'],0)
+lrt_table_data <- sapply(lrt_table_data, as.character)
+lrt_table_data[is.na(lrt_table_data)] <- " "
 
-
+kable( lrt_table_data, align = "lllll", booktabs = T) %>%
+  kable_styling(full_width = T)
 ```
 
 ```{r}
