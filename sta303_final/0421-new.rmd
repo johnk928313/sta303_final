@@ -242,6 +242,18 @@ black_saber_current_employees$leadership_for_level<-as.factor(black_saber_curren
 ```
 
 ```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
+#check general relationship between productivity and leadership_for_level for each team
+productivity_leadership<-black_saber_current_employees %>% 
+ ggplot(aes(x= leadership_for_level,fill=gender))+
+  geom_bar(position="fill")+
+  theme_minimal()+
+  facet_wrap(~team)+
+  labs(x="Percentage",
+       y="Leadership for level",
+       caption = str_c("Figure 3:Proportion of current employees with different leadership level by gender for each group"))+
+   scale_x_discrete(guide = guide_axis(n.dodge = 3))
+  ggsave("images/productivity_leadership.png",width = 7, height = 4)
+  
 # check general relationship between productivity and salary for each team
 productivity_salary<-black_saber_current_employees %>% 
  ggplot(aes(x= productivity,y=salary,color=gender))+
@@ -251,8 +263,9 @@ productivity_salary<-black_saber_current_employees %>%
   facet_wrap(~team) +
   theme_minimal()+
   labs(x= "Productivity",y="Salary",
-       caption = str_c("Figure3: Relationship between productivity and salary in each team by gender"))
+       caption = str_c("Figure4: Relationship between productivity and salary in each team by gender"))
 ggsave("images/productivity_salary.png",width = 7, height = 4)
+
 # Figure for executive summary
 productivity_salary_summary<-black_saber_current_employees %>% 
  ggplot(aes(x= productivity,y=salary,color=gender))+
@@ -265,6 +278,11 @@ productivity_salary_summary<-black_saber_current_employees %>%
        caption = str_c("Figure3: Relationship between productivity and salary for all eight teams by gender "))
 ggsave("images/productivity_salary_summary.png",width = 7, height = 3.1)
 ```
+![](images/productivity_leadership.png)
+  Figure 3 displays the leadership for level in BSS for different teams separated in gender. It is clear to see that in all teams, most women are considered as needing improvement while employees that exceeds expectations are all men. Hence, it is obviously that gender does become a potential variable that affect empolyees' leadership for level. \
+![](images/productivity_salary.png)
+ In Figure 4, current employees with higher productivity had lower productivity especially for those who prefer not to say their gender in most of teams which indicates potential bias existed in the salary process.
+
 
 ```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
 #models to check if salary is related to other variables
@@ -296,21 +314,6 @@ knitr::kable( lrt_table_data)
 
 __Table 5:__ Comparison between two different Linear Mixed-Effect Model.  \
 
-```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
-#check general relationship between productivity and leadership_for_level for each team
-productivity_leadership<-black_saber_current_employees %>% 
- ggplot(aes(x= leadership_for_level,fill=gender))+
-  geom_bar(position="fill")+
-  theme_minimal()+
-  facet_wrap(~team)+
-  labs(x="Percentage",
-       y="Leadership for level",
-       caption = str_c("Figure 3:Proportion of current employees with different leadership level by gender for each group"))+
-   scale_x_discrete(guide = guide_axis(n.dodge = 3))
-  ggsave("images/productivity_leadership.png",width = 7, height = 4)
-```
-
-Figure 2 displays the leadership for level in BSS for different teams separated in gender. It is clear to see that in all teams, most women are considered as needing improvement while employees that exceeds expectations are all men. Hence, it is obviously that gender does become a potential variable that affect empolyees' leadership for level.
 
 ## Discussion
 
