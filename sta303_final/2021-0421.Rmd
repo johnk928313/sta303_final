@@ -4,15 +4,14 @@ subtitle: "A special focus on gender parity"
 author: "Report prepared for Black Saber Software by SFP"
 date: '2021-04-21'
 output:
+  pdf_document:
+    template: report.tex
+    toc: yes
+    toc_depth: 2
   html_document:
     toc: yes
     toc_depth: '2'
     df_print: paged
-  pdf_document: 
-    template: report.tex
-    toc: yes
-    toc_depth: 2
-    latex_engine: pdflatex
 lang: en
 titlepage: yes
 titlepage-color: 6C3082
