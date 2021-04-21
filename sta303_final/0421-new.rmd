@@ -80,8 +80,8 @@ Throughout the analysis, we focused on investigating the fairness in the hiring,
 ## Possible future use of AI service in the hiring process \
 **\underline{Data Organization}**  \
 
-We considered a data set named all_phase combining all necessary data in the hiring process which include four datasets : phase1-new-grad-applicants-2020.csv, phase2-new-grad-applicants-2020.csv, phase3-new-grad-applicants-2020.csv and final-hires-newgrad_2020.csv. Each line of all_phase contains all aggregated information of an applicant in the hiring pipelines. In this analysis for the hiring process, the response variable is the result.
-Examination of data for the hiring process reveals the following key variables in all_phase:\
+We considered a dataset with all the phases by combining all necessary data in the hiring process which include four datasets : phase1, phase2, phase3, and final new graduate application. Each line of all phase data contains all aggregated information of an applicant in the hiring pipelines. In this analysis for the hiring process, the response variable is the result.
+Examination of data for the hiring process reveals the following key variables in all phases:\
 
 | Variable | Description|
 |:---------|:------------------------|
@@ -101,7 +101,7 @@ Examination of data for the hiring process reveals the following key variables i
 
 **\underline{Data Wrangling and Visualization}**\
 
-We first joined all phases' data together in the dataset called all_phase, and then created a new variable called final_result telling us whether an applicant was rejected at each phase or finally hired. And we also created another new variable called result for each phase which can indicate whether the applicant passes or not. Since our main purpose was to see whether AI service worked in the hiring process, we made some plots for scores of AI-autograded tasks by gender in phase2.  \
+We first joined all phases' data together in the dataset, and then created a new variable of final results telling us whether an applicant was rejected at each phase or finally hired. And we also created another new variable called result for each phase which can indicate whether the applicant passes or not. Since our main purpose was to see whether AI service worked in the hiring process, we made some plots for scores of AI-autograded tasks by gender in phase2.  \
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 # read in the data
@@ -250,7 +250,7 @@ As we can see in Figure 3, the boxplot for gpa of candidates grouped by gender a
 ## A potential gender bias in the salary and promotion processes
 **\underline{Data Organization}** \
 
-In the current employee data set, we have selected gender, team, leadership_for_level, productivity, and salary. We will focus on the following variables from black-saber-current-employees.csv: \
+In the current employee data set, we have selected gender, team, leadership for level, productivity, and salary. We will focus on the following variables from black-saber-current-employees.csv: \
 
 |Variable | Description |
 |:-----|:--------------------|
@@ -374,7 +374,7 @@ In conclusion, there does seem to be biases within gender, team, role seniority,
 
 First, we explored whether the AI used during the second 2 phase of the hiring process was reliable, and if there were any biases. Fitting a model to model the applicants result on the second phase ("refused" if they did not move on to phase 3, "proceed" if they do move on to phase 3) with the applicants' GPA, extracurriculars, work experience, leadership presence, speaking skills, technical skills, and writing skills as the effects, it was found that GPA, leadership presence, speaking skills, technical skills, and writing skills all have a significant effect on an applicants' success rate. Gender, however, did not have a significant effect on whether you would proceed or not. However, gender did not have a significant effect on your result for the second phase.
 
-Second, we explored the effects the various variables during the hiring phases had on the hiring chances. Fitting a model to model the applicant's hiring result (no if not hired, yes if hired) with the applicants' GPA,Curriculum Vitae, cover letter, extracurriculars, and work_experience as effects, it was found that only the GPA and extracurriculars had a significant effect on the being hired, while gender did not have a significant effect.
+Second, we explored the effects the various variables during the hiring phases had on the hiring chances. Fitting a model to model the applicant's hiring result (no if not hired, yes if hired) with the applicants' GPA,Curriculum Vitae, cover letter, extracurriculars, and work experience as effects, it was found that only the GPA and extracurriculars had a significant effect on the being hired, while gender did not have a significant effect.
 
 Finally, we took a look to see if the employees' promotions and salaries are fair and justified based on their ability and value to Black Saber Software. We first separated the salaries by gender, and  graphed each teams' employees' salaries against their productivity. We found that there was indeed a bias for gender. It was observed that the salaries of men based on their productivity is almost always inversely related to the salaries of women based on their productivity. What this means is that as a man's productivity goes up, they earn more, while as a woman's productivity goes up, they earn less, and vice versa. This rule is only broken in the Software team, where men and women all earn roughly the same amount. Furthermore, after modeling the data, it was found that the employees' salaries were indead biased based on many variables, including gender. We will not comment on the employees who did not disclose their gender as it is not indicative of bias in gender.
 
