@@ -164,7 +164,14 @@ ggsave("images/productivity_salary.png",width = 7, height = 4)
 mod_1 <-lmer(salary~gender+team+(1|employee_id),
              data=black_saber_current_employees)
 summary(mod_1)
+```
+
+```{r, warning=F, message=FALSE}
 mod_2 <-lmer(salary~gender+team+role_seniority+productivity+leadership_for_level+(1|employee_id:team)+(1|employee_id),data=black_saber_current_employees)
+summary(mod_2)
+```
+
+```{r}
 lmtest::lrtest(mod_1,mod_2)
 ```
 
@@ -188,9 +195,11 @@ black_saber_current_employees %>%
 
 _In this section you will summarize your findings across all the research questions and discuss the strengths and limitations of your work. It doesn't have to be long, but keep in mind that often people will just skim the intro and the discussion of a document like this, so make sure it is useful as a semi-standalone section (doesn't have to be completely standalone like the executive summary)._
 
-First, we explored the effects the various variables during the hiring phases had on the hiring chances. Fitting a model to model the applicant's hiring result (no if not hired, yes if hired) against the applicant's GPA,Curriculum Vitae, cover letter, extracurriculars, and work_experience, it was found that only the GPA and extracurriculars had a significant effect on the being hired, with p-values of 0.009 and 0.042 respectively.
+First, we explored the effects the various variables during the hiring phases had on the hiring chances. Fitting a model to model the applicant's hiring result (no if not hired, yes if hired) with the applicants' GPA,Curriculum Vitae, cover letter, extracurriculars, and work_experience as effects, it was found that only the GPA and extracurriculars had a significant effect on the being hired, with p-values of 0.009 and 0.042 respectively.
 
-Second, we explored whether the AI used during the first 2 phases of the hiring process was reliable, and if there were any biases.
+Second, we explored whether the AI used during the first 2 phases of the hiring process was reliable, and if there were any biases. Fitting a model to model the applicants result on the second phase ("refused" if they did not move on to phase 3, "proceed" if they do move on to phase 3) with the applicants' GPA, extracurriculars, work experience, leadership presence, speaking skills, technical skills, and writing skills as the effects, it was found that GPA, leadership presence, speaking skills, technical skills, and writing skills all have a significant effect on an applicants' success rate, with p-values of 0.4 for GPA, and <0.001 for the rest.
+
+Finally, we took a look to see if the employees' promotions and salaries are fair and justisfied based on the their ability and value to Black Saber Software. We first separated the salaries by gender, and  graphed each teams' employees' salaries against their productivity. We found that there was indeed a bias for gender.It was observed that the salaries of men based on their productivity is almost always inversely related to the salaries of women based on their productivity. What this means is that as a man's productivity goes up, they earn more, while as a woman's productivity goes up, they earn less, and vice versa. This rule is only broken in the Software team, where men and women all earn roughly the same amount. We will not comment on the emloyees who did not disclose their gender as it is not indicitive of bias in gender.
 
 ### Strengths and limitations
 
