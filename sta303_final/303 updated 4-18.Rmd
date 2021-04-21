@@ -50,11 +50,12 @@ Concerns about potential bias in the hiring and remuneration processes were cons
 We were only offered with data for current employees so it was hard to know reasons past employees left. If additional data related to past employees can be provided, we can have a more deep and comprehensive sight into potential biases;\
 The lack of ethnicity/race data also results in a limitation since race might be a potential exist which might influence the results of hiring pipelines and promotion and amount of wages;\
 No information about the determination methods for hiring results, promotion and amount of salary was provided which limited the accuracy of models we fit for these processes.
+
 \newpage
 ## Figures: \
-Key results are summarized in the following tables or graphs.
 ![](images/bar_result_gender.png)
 ![](images/AI_scores.png)
+![](images/productivity_salary_summary.png) 
 
 \newpage
 # Technical report
@@ -112,12 +113,6 @@ all_phase$final_result <- ifelse(all_phase$applicant_id %in% final_applicant$app
 all_phase$final_result <- factor(all_phase$final_result,level=c("Refused at phase 1","Refused at phase 2","Refused at phase 3","Hired"))
 
 
-# create new variables to show the hiring results for each candidates in each phrase
-phase1$result <- ifelse(phase1$applicant_id %in% phase2$applicant_id,"proceed","refused")
-phase2$result <- ifelse(phase2$applicant_id %in% phase3$applicant_id,"proceed","refused")
-phase3$result <- ifelse(phase3$applicant_id %in% final$applicant_id,"proceed","refused")
-all_phase$result <- ifelse(all_phase$applicant_id %in% final$applicant_id,"Hired","no")
-
 # check gender distribution on final results for applicants 
 bar_result_gender<-all_phase %>%
   ggplot(aes(x=final_result,fill=gender)) +
@@ -126,7 +121,7 @@ bar_result_gender<-all_phase %>%
   labs(x="Final hiring result",
        y="Percentage",
        caption = str_c(" Figure1: Proportion of Applicants who were refused in each hiring pipeline or finally hired by gender"))
-ggsave(file="images/bar_result_gender.png", height = 3, width= 8) 
+ggsave(file="images/bar_result_gender.png", height = 2.7, width=8) 
 
 # check AI service biased or not in Phase 2
 AI_technical<-phase2 %>%
@@ -164,9 +159,8 @@ ggsave(file="images/AI_check.png", AI_check ,height = 3.5)
 
 # create the AI-related graph for executive summmary
 AI_socres <-grid.arrange(AI_technical, AI_writing, AI_speaking, AI_leadership,
-                         nrow=2,ncol = 2, bottom = textGrob("Figure 3: Distribution of AI-autograded Scores/Ratings by Gender in the Phase 2, \n\nThe horizontal line in each box represents the median of scores which separates the top 50% scores from the\n lowest 50%. The horizontal lines at the top and bottom for each box represent the lowest 75% and 25% of the\n scores respectively. The ends of vertical lines give the full range of scores, with some dots representing \nextreme values away from the box.", x = 0.05, y = 0.6, just = "left", gp = gpar(fontsize = 9)))
+                         nrow=2,ncol = 2, bottom = textGrob("Figure 2: Distribution of AI-autograded Scores/Ratings by Gender in the Phase 2 \n\nThe horizontal line in each box represents the median of scores which separates the top 50% scores from the\n lowest 50%. The horizontal lines at the top and bottom for each box represent the lowest 75% and 25% of the\n scores respectively. The ends of vertical lines give the full range of scores, with some dots representing \nextreme values away from the box.", x = 0.09, y = 0.6, just = "left", gp = gpar(fontsize = 9)))
 ggsave(file="images/AI_scores.png", AI_socres ,height = 3.5)
-
 
 ```
 
@@ -226,18 +220,28 @@ black_saber_current_employees$leadership_for_level<-as.factor(black_saber_curren
 
 ```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
 # check general relationship between productivity and salary for each team
-black_saber_current_employees %>% 
+productivity_salary<-black_saber_current_employees %>% 
  ggplot(aes(x= productivity,y=salary,color=gender))+
   geom_smooth(method = "lm",
               se = FALSE,
               size = 1.5) +
   facet_wrap(~team) +
   theme_minimal()+
-  labs(title="Productivity by salary",
-       x="Productivity",
-       y="Salary",
-       caption = str_c("Prepared by SFP\n",Sys.Date()))
+  labs(x= "Productivity",y="Salary",
+       caption = str_c("Figure3: Relationship between productivity and salary in each team by gender"))
 ggsave("images/productivity_salary.png",width = 7, height = 4)
+
+# Figure for executive summary
+productivity_salary_summary<-black_saber_current_employees %>% 
+ ggplot(aes(x= productivity,y=salary,color=gender))+
+  geom_smooth(method = "lm",
+              se = FALSE,
+              size = 1.5) +
+  facet_wrap(~team) +
+  theme_minimal()+
+  labs(x= "Productivity",y="Salary",
+       caption = str_c("Figure3: Relationship between productivity and salary for all eight teams by gender "))
+ggsave("images/productivity_salary_summary.png",width = 7, height = 3.1)
 ```
 __Graph 1:__ General relationship between productivity and salary for each team separated by gender. \
 
