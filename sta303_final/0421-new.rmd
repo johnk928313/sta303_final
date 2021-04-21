@@ -170,7 +170,10 @@ Figure 1 presented a five-number summary: the minimum, the maximum, the sample m
 
 \newpage
 
-**\underline{Models}**
+**\underline{Models}**\
+
+Since our response variable has only two levels : hired or no which is equivalent to binary variale, generalized linear model came out immediately. As we were interested in studying whether AI service was reliable in the hiring process without potential bias, we created two different models to determine whether including the grades made by AI service. In the first model, we checked if variables in the pahse 1 are related to the final result. The second model, we contained all covariates in the phase 2 to check whether AI service had effect on the final result. \
+From the p-value from result of the first model, we found that gpa and gender are significant since the p-values are smaller than 0.05. So we included them in the next model to have further analysis in order to check whether gender had impact on the hiring results. In the result of the second model, we found that gpa, leadership presence rating, speaking skills rating, technical task scores and writing task scores are all significant since the p-value is less than 0.05. Therefore, there is significant evidence that all scores and ratings made by AI service are associated with the final hiring result. And there is no evidence that gender effects the final result by using AI service. Therefore, we can conclude that AI service works and is reliable for future use without gender bias.
 
 
 ```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
@@ -295,19 +298,17 @@ __Table 5:__ Comparison between two different Linear Mixed-Effect Model.  \
 
 ```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
 #check general relationship between productivity and leadership_for_level for each team
-black_saber_current_employees %>% 
+productivity_leadership<-black_saber_current_employees %>% 
  ggplot(aes(x= leadership_for_level,fill=gender))+
   geom_bar(position="fill")+
   theme_minimal()+
   facet_wrap(~team)+
-  labs(title="Gender distribution on leadership for level",
-       x="Leadership for level",
-       y="Percentage",
-       caption = str_c("Prepared by SFP\n",Sys.Date())) +
-  scale_x_discrete(guide = guide_axis(n.dodge = 3))
+  labs(x="Percentage",
+       y="Leadership for level",
+       caption = str_c("Figure 3:Proportion of current employees with different leadership level by gender for each group"))+
+   scale_x_discrete(guide = guide_axis(n.dodge = 3))
   ggsave("images/productivity_leadership.png",width = 7, height = 4)
 ```
-#__Figure 2:__ General relationship between productivity and leadership_for_level for each team separated by gender. \
 
 ## Discussion
 
