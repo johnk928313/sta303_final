@@ -95,6 +95,7 @@ Examination of data for hiring process reveals the following key variables in al
 |final_result | Indicate at which phase applicant was rejected or hired finally |
 |result |Show the hiring result for each applicant in each hiring pipeline |
 
+\newpage
 
 **\underline{Data Wrangling and Visualization}**\
 
@@ -167,29 +168,32 @@ ggsave(file="images/AI_scores.png", AI_socres ,height = 3.5)
 
 Figure 1 presented a five-number summary: the minimum, the maximum, the sample median, and the first and third quartiles based on different genders for the scores or ratings by AI service. We can see generally there is no difference of scores or ratings between man and women since in all the four plots, man and women gave the similar five-number smmary results. But in the technical task scores plot, the boxplot for people with gender prefer not to say was not overlapped with other two boxplots for man and woman so there might be a significant difference between gender in scores rated by AI and we need to do further analysis.
 
+\newpage
+
 **\underline{Models}**
 
 
 ```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
-
 # Create model 1 to see if several response variables are related to the final result.
 model_1 <- glm(as.factor(result) ~ gpa+cv+cover_letter+extracurriculars+work_experience,
                data = all_phase, family = binomial("logit"))
 tbl_regression(model_1)
 #Create model 2 to see AI score preference
+```
+
+__Table 1:__ Overall Key statistical summaries of the Generalized Linear Model related to accepted applicant. \
+
+
+```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
 model_2 <- glm(as.factor(result) ~ gpa+extracurriculars+work_experience+leadership_presence+
                  speaking_skills+technical_skills+writing_skills, 
                data = phase2, family = binomial("logit"))
 tbl_regression(model_2)
 ```
 
-
-__Figure 2:__ Key statistical summaries of the Generalized Linear Model related to AI scoring in phase 2. \
-
+__Table 2:__ Key statistical summaries of the Generalized Linear Model related to AI scoring in phase 2. \
 
 \newpage
-## Fairness in the hiring process
-__Figure 1:__ Overall Key statistical summaries of the Generalized Linear Model related to accepted applicant. \
 
 ```{r gender_parity}
 # check gender distribution on final results for applicants 
@@ -258,7 +262,6 @@ productivity_salary_summary<-black_saber_current_employees %>%
        caption = str_c("Figure3: Relationship between productivity and salary for all eight teams by gender "))
 ggsave("images/productivity_salary_summary.png",width = 7, height = 3.1)
 ```
-__Graph 1:__ General relationship between productivity and salary for each team separated by gender. \
 
 ```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
 #models to check if salary is related to other variables
@@ -267,10 +270,14 @@ mod_1 <-lmer(salary~gender+team+(1|employee_id),
 tbl_regression(mod_1)
 ```
 
+__Table 3:__ Key statistical summaries of the Linear Mixed-Effect Model to check salary related variables. \
+
 ```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
 mod_2 <-lmer(salary~gender+team+role_seniority+productivity+leadership_for_level+(1|employee_id:team)+(1|employee_id),data=black_saber_current_employees)
 tbl_regression(mod_2)
 ```
+
+__Table 4:__ Key statistical summaries of the Linear Mixed-Effect Model to check salary related variables. \
 
 ```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -283,7 +290,8 @@ lrt_table_data[is.na(lrt_table_data)] <- " "
 knitr::kable( lrt_table_data)
 
 ```
-__Figure 3:__ Key statistical summaries of the Linear Mixed-Effect Model to check salary related variables. \
+
+__Table 5:__ Comparison between two different Linear Mixed-Effect Model.  \
 
 ```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
 #check general relationship between productivity and leadership_for_level for each team
@@ -299,7 +307,7 @@ black_saber_current_employees %>%
   scale_x_discrete(guide = guide_axis(n.dodge = 3))
   ggsave("images/productivity_leadership.png",width = 7, height = 4)
 ```
-__Graph 2:__ General relationship between productivity and leadership_for_level for each team separated by gender. \
+#__Figure 2:__ General relationship between productivity and leadership_for_level for each team separated by gender. \
 
 ## Discussion
 
