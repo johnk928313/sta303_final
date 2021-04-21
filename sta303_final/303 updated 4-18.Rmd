@@ -110,6 +110,11 @@ all_phase$final_result <- ifelse(all_phase$applicant_id %in% final_applicant$app
                            ifelse(all_phase$applicant_id %in% phase3$applicant_id,"Refused at phase 3",  
                            ifelse(all_phase$applicant_id %in% phase2$applicant_id,"Refused at phase 2","Refused at phase 1")))
 all_phase$final_result <- factor(all_phase$final_result,level=c("Refused at phase 1","Refused at phase 2","Refused at phase 3","Hired"))
+# create new variables to show the hiring results for each candidates in each phrase
+phase1$result <- ifelse(phase1$applicant_id %in% phase2$applicant_id,"proceed","refused")
+phase2$result <- ifelse(phase2$applicant_id %in% phase3$applicant_id,"proceed","refused")
+phase3$result <- ifelse(phase3$applicant_id %in% final$applicant_id,"proceed","refused")
+all_phase$result <- ifelse(all_phase$applicant_id %in% final$applicant_id,"Hired","no")
 
 
 # check gender distribution on final results for applicants 
