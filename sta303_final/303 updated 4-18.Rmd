@@ -157,10 +157,16 @@ AI_leadership<-phase2 %>%
   theme_minimal()+
   theme(legend.position = "none",plot.title = element_text(hjust = 0.5, size = 11))+
   labs(x= "Gender",y="Rating",title="Leadership presence rating")
+# create a 2x2 plot to show all AI-autograded socres by gender
+AI_check <-grid.arrange(AI_technical, AI_writing, AI_speaking, AI_leadership,
+                         nrow=2,ncol = 2, bottom = textGrob("Figure 2: Distribution of AI-autograded Scores/Ratings by Gender in the Phase 2", x = 0.05, y = 0.6, just = "left", gp = gpar(fontsize = 9)))
+ggsave(file="images/AI_check.png", AI_check ,height = 3.5)
 
+# create the AI-related graph for executive summmary
 AI_socres <-grid.arrange(AI_technical, AI_writing, AI_speaking, AI_leadership,
                          nrow=2,ncol = 2, bottom = textGrob("Figure 3: Distribution of AI-autograded Scores/Ratings by Gender in the Phase 2, \n\nThe horizontal line in each box represents the median of scores which separates the top 50% scores from the\n lowest 50%. The horizontal lines at the top and bottom for each box represent the lowest 75% and 25% of the\n scores respectively. The ends of vertical lines give the full range of scores, with some dots representing \nextreme values away from the box.", x = 0.05, y = 0.6, just = "left", gp = gpar(fontsize = 9)))
 ggsave(file="images/AI_scores.png", AI_socres ,height = 3.5)
+
 
 ```
 
