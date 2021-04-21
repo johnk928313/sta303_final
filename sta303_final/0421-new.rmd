@@ -70,9 +70,9 @@ In this report, we will specify different explanatory and response variables for
 
 ## Research questions
 Throughout the analysis, we focused on investigating the fairness in the hiring, promoting, and salary processes at Black Saber Software. Below are our questions of interest:\
-* Does the new AI service in the hiring pipeline work and is reliable for future use?
-* If the applicantes are hired in the hiring process based on their ability and value to BSS?
-* Is gender a potential bias during the promotion and salary processes?
+* Does the new AI service in the hiring pipeline work and is reliable for future use? \
+* If the applicantes are hired in the hiring process based on their ability and value to BSS? \
+* Is gender a potential bias during the promotion and salary processes? \
 
 \newpage
 ## Possible future use of AI service in the hiring process \
@@ -170,7 +170,7 @@ Figure 1 presented a five-number summary: the minimum, the maximum, the sample m
 **\underline{Models}**
 
 
-```{r }
+```{r, include=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
 
 # Create model 1 to see if several response variables are related to the final result.
 model_1 <- glm(as.factor(result) ~ gpa+cv+cover_letter+extracurriculars+work_experience,
